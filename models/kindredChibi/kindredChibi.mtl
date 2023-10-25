@@ -1,0 +1,14 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl Low_Poly
+Ns 50.280997
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.195455 0.195455 0.195455
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump /home/chris/Downloads/kindred chibi/source/Normals_test.png
+map_Kd /home/chris/Downloads/kindred chibi/source/Kindred_Base.png

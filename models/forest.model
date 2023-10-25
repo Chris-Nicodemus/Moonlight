@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/forest/source/Forest.obj",
+        "texture":"models/forest/textures/grass3.jpg"
+    }
+}

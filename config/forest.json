@@ -1,0 +1,9 @@
+{
+    "world":
+    {
+        "model":"models/plain.model",
+        "position":[0,0,0],
+        "scale":[100,100,100],
+        "rotation":[0,0,0]
+    }
+}

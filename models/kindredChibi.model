@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/kindredChibi/kindredChibi.obj",
+        "texture":"models/kindredChibi/textures/Kindred_Base.png"
+    }
+}

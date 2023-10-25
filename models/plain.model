@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/plain/plain.obj",
+        "texture":"models/plain/cuteGrass.jpg"
+    }
+}

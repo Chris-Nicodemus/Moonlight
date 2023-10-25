@@ -6,6 +6,7 @@
 #include "gfc_text.h"
 #include "gfc_matrix.h"
 #include "gf3d_pipeline.h"
+#include "gf3d_obj_load.h"
 
 typedef struct
 {
@@ -35,17 +36,7 @@ typedef struct
     Vector4D color; 
 }SkyUBO;
 
-typedef struct
-{
-    Vector3D vertex;
-    Vector3D normal;
-    Vector2D texel;
-}Vertex;
 
-typedef struct
-{
-    Uint32  verts[3];
-}Face;
 
 typedef struct
 {
@@ -58,6 +49,7 @@ typedef struct
     Uint32          faceCount;
     VkBuffer        faceBuffer;
     VkDeviceMemory  faceBufferMemory;
+    ObjData         *obj;
 }Mesh;
 
 /**

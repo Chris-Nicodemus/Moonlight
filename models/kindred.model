@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/kindred/kindred.obj",
+        "texture":"models/kindred/textures/TX_Body.jpeg"
+    }
+}

@@ -12,6 +12,7 @@
 # Linux
 PROJECT = gf3d
 CC      = gcc
+#CC	= g++
 #CC      = clang
 
 

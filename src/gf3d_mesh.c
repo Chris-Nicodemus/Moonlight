@@ -247,6 +247,7 @@ void gf3d_mesh_delete(Mesh *mesh)
     {
         vkFreeMemory(gf3d_vgraphics_get_default_logical_device(), mesh->bufferMemory, NULL);
     }
+    gf3d_obj_free(mesh->obj);
     memset(mesh,0,sizeof(Mesh));
 }
 
@@ -389,7 +390,7 @@ Mesh *gf3d_mesh_load(const char *filename)
         return NULL;
     }
     gf3d_mesh_create_vertex_buffer_from_vertices(mesh,obj->faceVertices,obj->face_vert_count,obj->outFace,obj->face_count);
-    gf3d_obj_free(obj);
+    mesh->obj=obj;
     gfc_line_cpy(mesh->filename,filename);
     return mesh;
 }

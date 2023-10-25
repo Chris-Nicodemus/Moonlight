@@ -4,7 +4,7 @@
 #include "gf3d_camera.h"
 #include "player.h"
 
-static int thirdPersonMode = 0;
+static int thirdPersonMode = 1;
 void player_think(Entity *self);
 void player_update(Entity *self);
 
@@ -19,13 +19,13 @@ Entity *player_new(Vector3D position)
         return NULL;
     }
     
-    ent->model = gf3d_model_load("models/dino.model");
+    ent->model = gf3d_model_load("models/kindred.model");
     ent->think = player_think;
     ent->update = player_update;
     vector3d_copy(ent->position,position);
     ent->rotation.x = -GFC_PI;
     ent->rotation.z = -GFC_HALF_PI;
-    ent->hidden = 1;
+    ent->hidden = 0;
     return ent;
 }
 
@@ -43,11 +43,11 @@ void player_think(Entity *self)
     mouse.x = mx;
     mouse.y = my;
     w = vector2d_from_angle(self->rotation.z);
-    forward.x = w.x;
-    forward.y = w.y;
+    forward.x = w.x * 0.1;
+    forward.y = w.y * 0.1;
     w = vector2d_from_angle(self->rotation.z - GFC_HALF_PI);
-    right.x = w.x;
-    right.y = w.y;
+    right.x = w.x * 0.1;
+    right.y = w.y * 0.1;
     if (keys[SDL_SCANCODE_W])
     {   
         vector3d_add(self->position,self->position,forward);
@@ -64,8 +64,8 @@ void player_think(Entity *self)
     {
         vector3d_add(self->position,self->position,-right);
     }
-    if (keys[SDL_SCANCODE_SPACE])self->position.z += 1;
-    if (keys[SDL_SCANCODE_Z])self->position.z -= 1;
+    if (keys[SDL_SCANCODE_SPACE])self->position.z += 0.1;
+    if (keys[SDL_SCANCODE_Z])self->position.z -= 0.1;
     
     if (keys[SDL_SCANCODE_UP])self->rotation.x -= 0.0050;
     if (keys[SDL_SCANCODE_DOWN])self->rotation.x += 0.0050;

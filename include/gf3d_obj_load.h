@@ -1,7 +1,18 @@
 #ifndef __GF3D_OBJ_LOAD_H__
 #define __GF3D_OBJ_LOAD_H__
 
-#include "gf3d_mesh.h"
+#include "gfc_vector.h"
+typedef struct
+{
+    Vector3D vertex;
+    Vector3D normal;
+    Vector2D texel;
+}Vertex;
+
+typedef struct
+{
+    Uint32  verts[3];
+}Face;
 
 typedef struct
 {    
