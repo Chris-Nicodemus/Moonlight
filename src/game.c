@@ -63,7 +63,7 @@ int main(int argc,char *argv[])
     mouse = gf2d_sprite_load("images/pointer.png",32,32, 16);
     
     
-    agu = agumon_new(vector3d(0 ,0,0));
+    agu = agumon_new(vector3d(0,0,10));
     agu->scale = vector3d(5,5,5);
 //     if (agu)agu->selected = 1;
     //w = world_load("config/testworld.json");
@@ -118,8 +118,8 @@ int main(int argc,char *argv[])
 //                 }
             //2D draws
                 gf2d_draw_rect_filled(gfc_rect(10 ,10,1000,32),gfc_color8(128,128,128,255));
-                gf2d_font_draw_line_tag("Press ALT+F4 to exit",FT_H1,gfc_color(1,1,1,1), vector2d(10,10));
-                //gf2d_draw_bezier_curve(Vector2D(0,0),)
+                gf2d_font_draw_line_tag("Press q to exit",FT_H1,gfc_color(1,1,1,1), vector2d(10,10));
+                //gf2d_draw_bezier_curve(Vector2D(0,0), Vector2D(1,1), Vector2D(2,0), Color(0,243,255,1));
                 gf2d_draw_rect(gfc_rect(10 ,10,1000,32),gfc_color8(255,255,255,255));
                 
                 gf2d_sprite_draw(mouse,vector2d(mousex,mousey),vector2d(2,2),vector3d(8,8,0),gfc_color(0.3,.9,1,0.9),(Uint32)mouseFrame);

@@ -50,6 +50,7 @@ typedef struct Entity_S
     struct Entity_S *target;    /**<entity to target for weapons / ai*/
     
     void *customData;   /**<IF an entity needs to keep track of extra data, we can do it here*/
+    float gravForce; //force of gravity for entity
 }Entity;
 
 /**
@@ -98,4 +99,10 @@ void entity_think_all();
  */
 void entity_update_all();
 
+
+/**
+ * @brief gravity function meant to pair with update or think
+ * @param self the entity in question
+*/
+void entity_gravity(Entity *self);
 #endif

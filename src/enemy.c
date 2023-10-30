@@ -1,32 +1,30 @@
-
 #include "simple_logger.h"
-#include "agumon.h"
+#include "enemy.h"
 
+void enemy_update(Entity *self);
 
-void agumon_update(Entity *self);
+void enemy_think(Entity *self);
 
-void agumon_think(Entity *self);
-
-Entity *agumon_new(Vector3D position)
+Entity *enemy_new(Vector3D pos, int enemyType)
 {
     Entity *ent = NULL;
     
     ent = entity_new();
     if (!ent)
     {
-        slog("UGH OHHHH, no agumon for you!");
+        slog("UGH OHHHH, no enemy for you!");
         return NULL;
     }
     ent->selectedColor = gfc_color(0.1,1,0.1,1.0);
     ent->color = gfc_color(1,1,1,1);
-    ent->model = gf3d_model_load("models/kindredHead.model");
-    ent->think = agumon_think;
-    ent->update = agumon_update;
-    vector3d_copy(ent->position,position);
+    ent->model = gf3d_model_load("models/kindred.model");
+    ent->think = enemy_think;
+    ent->update = enemy_update;
+    vector3d_copy(ent->position,pos);
     return ent;
 }
 
-void agumon_update(Entity *self)
+void enemy_update(Entity *self)
 {
     if (!self)
     {
@@ -34,11 +32,10 @@ void agumon_update(Entity *self)
         return;
     }
     vector3d_add(self->position,self->position,self->velocity);
-    entity_gravity(self);
     //self->rotation.z += 0.01;
 }
 
-void agumon_think(Entity *self)
+void enemy_think(Entity *self)
 {
     if (!self)return;
     switch(self->state)
@@ -57,5 +54,3 @@ void agumon_think(Entity *self)
             break;
     }
 }
-
-/*eol@eof*/
