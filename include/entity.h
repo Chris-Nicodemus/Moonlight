@@ -54,8 +54,8 @@ typedef struct Entity_S
     //my stuff
     float gravForce; //force of gravity for entity
     Bool player;    //true if entity is a player
-    float manaMax;  //player's mana pool
-    float mana;     //player's current mana
+    int manaMax;  //player's mana pool
+    int mana;     //player's current mana
 }Entity;
 
 /**

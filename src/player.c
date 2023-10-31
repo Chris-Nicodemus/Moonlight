@@ -31,7 +31,6 @@ Entity *player_new(Vector3D position)
     ent->manaMax=100;
     ent->mana=ent->manaMax;
     return ent;
-    
 }
 
 

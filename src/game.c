@@ -41,6 +41,10 @@ int main(int argc,char *argv[])
 
     World *forest;
 
+    Entity *player;
+    float manaRatio = 0.0;
+    uint32_t nextManaLoss = 0;
+
     for (a = 1; a < argc;a++)
     {
         if (strcmp(argv[a],"--debug") == 0)
@@ -73,7 +77,7 @@ int main(int argc,char *argv[])
     SDL_SetRelativeMouseMode(SDL_TRUE);
     slog_sync();
     gf3d_camera_set_scale(vector3d(1,1,1));
-    player_new(vector3d(-50,0,0));
+    player = player_new(vector3d(-50,0,0));
     
 //     for (a = 0; a < 100; a++)
 //     {
@@ -122,7 +126,20 @@ int main(int argc,char *argv[])
                 //gf2d_draw_bezier_curve(Vector2D(0,0), Vector2D(1,1), Vector2D(2,0), Color(0,243,255,1));
                 gf2d_draw_rect(gfc_rect(10 ,10,1000,32),gfc_color8(255,255,255,255));
                 
-                gf2d_sprite_draw(mouse,vector2d(mousex,mousey),vector2d(2,2),vector3d(8,8,0),gfc_color(0.3,.9,1,0.9),(Uint32)mouseFrame);
+                //mana
+                manaRatio = (float)(player->mana)/(float)(player->manaMax)*100;
+                slog("mana ratio: %f",manaRatio);
+                gf2d_draw_rect_filled(gfc_rect(10,650,500,32),gfc_color8(25,25,25,255));
+                gf2d_draw_rect_filled(gfc_rect(10,650,(int)(manaRatio)*5,32),gfc_color8(0,245,255,170));
+                char text[10];
+                sprintf(text,"Mana: %i",player->mana);
+                gf2d_font_draw_line_tag(text,FT_H1,gfc_color(1,1,1,1),vector2d(15,650));
+                if(player->mana > 0 && SDL_GetTicks() > nextManaLoss)
+                {
+                    player->mana = player->mana - 5;
+                    nextManaLoss = SDL_GetTicks() + 1000;
+                }
+                //gf2d_sprite_draw(mouse,vector2d(mousex,mousey),vector2d(2,2),vector3d(8,8,0),gfc_color(0.3,.9,1,0.9),(Uint32)mouseFrame);
         gf3d_vgraphics_render_end();
 
         if (gfc_input_command_down("exit"))done = 1; // exit condition
