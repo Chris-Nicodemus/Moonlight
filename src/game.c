@@ -67,7 +67,7 @@ int main(int argc,char *argv[])
     mouse = gf2d_sprite_load("images/pointer.png",32,32, 16);
     
     
-    agu = agumon_new(vector3d(0,0,10));
+    agu = agumon_new(vector3d(10,10,10));
     agu->scale = vector3d(5,5,5);
 //     if (agu)agu->selected = 1;
     //w = world_load("config/testworld.json");
@@ -78,6 +78,7 @@ int main(int argc,char *argv[])
     slog_sync();
     gf3d_camera_set_scale(vector3d(1,1,1));
     player = player_new(vector3d(-50,0,0));
+    player->scale = vector3d(5,5,5);
     
 //     for (a = 0; a < 100; a++)
 //     {
@@ -127,7 +128,7 @@ int main(int argc,char *argv[])
                 gf2d_draw_rect(gfc_rect(10 ,10,1000,32),gfc_color8(255,255,255,255));
                 //gf2d_draw_rect_filled(gfc_rect(10,650,(int)(manaRatio)*5,32),gfc_color8(0,245,255,170));
                 manaRatio = (float)(player->mana)/(float)(player->manaMax)*100;
-                slog("mana ratio: %f",manaRatio);
+                //slog("mana ratio: %f",manaRatio);
                 gf2d_draw_rect_filled(gfc_rect(10,650,500,32),gfc_color8(25,25,25,255));
                 gf2d_draw_rect_filled(gfc_rect(10,650,(int)(manaRatio)*5,32),gfc_color8(0,245,255,170));
                 char text[10];

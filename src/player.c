@@ -33,7 +33,18 @@ Entity *player_new(Vector3D position)
     return ent;
 }
 
+Bool testPostion(Entity *self, Vector3D move)
+{
+    Vector3D testPos = self->position;
+    vector3d_add(testPos,testPos,move);
+    
+    if(testPos.x > 2100) return false;
+    if(testPos.x < -2100) return false;
+    if(testPos.y > 2100) return false;
+    if(testPos.y < -2100) return false;
 
+    return true;
+}
 void player_think(Entity *self)
 {
     Vector3D forward = {0};
@@ -52,23 +63,32 @@ void player_think(Entity *self)
     w = vector2d_from_angle(self->rotation.z - GFC_HALF_PI);
     right.x = w.x * 0.1;
     right.y = w.y * 0.1;
+
     if (keys[SDL_SCANCODE_W])
     {   
+        if(testPostion(self,forward))
         vector3d_add(self->position,self->position,forward);
     }
     if (keys[SDL_SCANCODE_S])
     {
+        
+        if(testPostion(self,vector3d(-forward.x,-forward.y,-forward.z)))
         vector3d_add(self->position,self->position,-forward);        
     }
     if (keys[SDL_SCANCODE_D])
     {
+        if(testPostion(self,right))
         vector3d_add(self->position,self->position,right);
     }
     if (keys[SDL_SCANCODE_A])    
     {
+        if(testPostion(self,vector3d(-right.x,-right.y,-right.z)))
         vector3d_add(self->position,self->position,-right);
     }
-    //if (keys[SDL_SCANCODE_SPACE])self->position.z += 0.1;
+    if (keys[SDL_SCANCODE_SPACE])
+    {
+        slog("Position:\nx: %f\ty: %f\tz: %f",self->position.x,self->position.y,self->position.z);
+    }
     //if (keys[SDL_SCANCODE_Z])self->position.z -= 0.1;
     
     if (keys[SDL_SCANCODE_UP])self->rotation.x -= 0.0050;
