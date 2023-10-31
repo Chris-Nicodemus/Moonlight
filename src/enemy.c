@@ -20,6 +20,8 @@ Entity *enemy_new(Vector3D pos, int enemyType)
     ent->model = gf3d_model_load("models/kindred.model");
     ent->think = enemy_think;
     ent->update = enemy_update;
+    ent->gravForce = -0.05;
+    ent->player=false;
     vector3d_copy(ent->position,pos);
     return ent;
 }

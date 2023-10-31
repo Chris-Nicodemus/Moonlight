@@ -26,7 +26,12 @@ Entity *player_new(Vector3D position)
     ent->rotation.x = -GFC_PI;
     ent->rotation.z = -GFC_HALF_PI;
     ent->hidden = 0;
+    ent->player=true;
+    ent->gravForce= -0.05;
+    ent->manaMax=100;
+    ent->mana=ent->manaMax;
     return ent;
+    
 }
 
 

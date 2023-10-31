@@ -23,6 +23,7 @@ Entity *agumon_new(Vector3D position)
     ent->think = agumon_think;
     ent->update = agumon_update;
     vector3d_copy(ent->position,position);
+    ent->gravForce=-0.05;
     return ent;
 }
 

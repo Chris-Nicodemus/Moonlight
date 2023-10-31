@@ -50,7 +50,12 @@ typedef struct Entity_S
     struct Entity_S *target;    /**<entity to target for weapons / ai*/
     
     void *customData;   /**<IF an entity needs to keep track of extra data, we can do it here*/
+
+    //my stuff
     float gravForce; //force of gravity for entity
+    Bool player;    //true if entity is a player
+    float manaMax;  //player's mana pool
+    float mana;     //player's current mana
 }Entity;
 
 /**
