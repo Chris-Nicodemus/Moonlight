@@ -8,6 +8,8 @@ static int thirdPersonMode = 1;
 void player_think(Entity *self);
 void player_update(Entity *self);
 
+Entity *entList;
+
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
@@ -18,18 +20,25 @@ Entity *player_new(Vector3D position)
         slog("UGH OHHHH, no player for you!");
         return NULL;
     }
-    
+    entList = getManager();
+    int i;
+    for(i = 0; i < sizeof(entList); i++)
+    {
+        slog("Got an ent here");
+    }
     ent->model = gf3d_model_load("models/kindred.model");
     ent->think = player_think;
     ent->update = player_update;
     vector3d_copy(ent->position,position);
     ent->rotation.x = -GFC_PI;
+    ent->rotation.y = GFC_PI;
     ent->rotation.z = -GFC_HALF_PI;
     ent->hidden = 0;
     ent->player=true;
     ent->gravForce= -0.05;
-    ent->manaMax=100;
-    ent->mana=ent->manaMax;
+    ent->bounds = gfc_box(ent->position.x,ent->position.y,ent->position.z,5,5,5);
+    ent->manaMax = 100;
+    ent->mana = ent->manaMax;
     return ent;
 }
 
@@ -45,6 +54,7 @@ Bool testPostion(Entity *self, Vector3D move)
 
     return true;
 }
+
 void player_think(Entity *self)
 {
     Vector3D forward = {0};
@@ -64,6 +74,7 @@ void player_think(Entity *self)
     right.x = w.x * 0.1;
     right.y = w.y * 0.1;
 
+    self->bounds = gfc_box(self->position.x,self->position.y,self->position.z,5,5,5);
     if (keys[SDL_SCANCODE_W])
     {   
         if(testPostion(self,forward))
@@ -71,7 +82,6 @@ void player_think(Entity *self)
     }
     if (keys[SDL_SCANCODE_S])
     {
-        
         if(testPostion(self,vector3d(-forward.x,-forward.y,-forward.z)))
         vector3d_add(self->position,self->position,-forward);        
     }
@@ -87,7 +97,7 @@ void player_think(Entity *self)
     }
     if (keys[SDL_SCANCODE_SPACE])
     {
-        slog("Position:\nx: %f\ty: %f\tz: %f",self->position.x,self->position.y,self->position.z);
+        slog("Rotation:\nx: %f\ty: %f\tz: %f",self->rotation.x,self->rotation.y,self->rotation.z);
     }
     //if (keys[SDL_SCANCODE_Z])self->position.z -= 0.1;
     
@@ -99,11 +109,11 @@ void player_think(Entity *self)
     if (mouse.x != 0)self->rotation.z -= (mouse.x * 0.001);
     if (mouse.y != 0)self->rotation.x += (mouse.y * 0.001);
 
-    if (keys[SDL_SCANCODE_F3])
+    /*if (keys[SDL_SCANCODE_F3])
     {
         thirdPersonMode = !thirdPersonMode;
         self->hidden = !self->hidden;
-    }
+    }*/
 
     entity_gravity(self);
 }
@@ -121,7 +131,7 @@ void player_update(Entity *self)
     vector3d_copy(rotation,self->rotation);
     if (thirdPersonMode)
     {
-        position.z += 100;
+        position.z += 50;
         rotation.x += M_PI*0.125;
         w = vector2d_from_angle(self->rotation.z);
         forward.x = w.x * 100;

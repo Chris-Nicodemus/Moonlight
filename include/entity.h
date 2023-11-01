@@ -51,11 +51,11 @@ typedef struct Entity_S
     
     void *customData;   /**<IF an entity needs to keep track of extra data, we can do it here*/
 
-    //my stuff
+    //my stuff common
     float gravForce; //force of gravity for entity
     Bool player;    //true if entity is a player
-    int manaMax;  //player's mana pool
-    int mana;     //player's current mana
+    int manaMax;
+    int mana;
 }Entity;
 
 /**

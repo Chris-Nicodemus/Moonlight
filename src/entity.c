@@ -12,7 +12,7 @@ typedef struct
     
 }EntityManager;
 
-static EntityManager entity_manager = {0};
+EntityManager entity_manager = {0};
 
 void entity_system_close()
 {
@@ -163,5 +163,10 @@ void entity_gravity(Entity *self)
     {
         self->position.z = 0;
     }
+}
+
+Entity *getManager()
+{
+    return entity_manager.entity_list;
 }
 /*eol@eof*/

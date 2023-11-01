@@ -21,6 +21,8 @@
 #include "agumon.h"
 #include "player.h"
 #include "world.h"
+#include "enemy.h"
+#include "companion.h"
 
 extern int __DEBUG;
 
@@ -29,21 +31,21 @@ int main(int argc,char *argv[])
     int done = 0;
     int a;
     
-    Sprite *mouse = NULL;
+    //Sprite *mouse = NULL;
     int mousex,mousey;
     //Uint32 then;
     float mouseFrame = 0;
     //World *w;
-    Entity *agu;
+    Entity *enemy;
     //Particle particle[100];
     Matrix4 skyMat;
     Model *sky;
 
     World *forest;
 
-    Entity *player;
+    Entity*player;
     float manaRatio = 0.0;
-    uint32_t nextManaLoss = 0;
+    //uint32_t nextManaLoss = 0;
 
     for (a = 1; a < argc;a++)
     {
@@ -64,11 +66,8 @@ int main(int argc,char *argv[])
     
     entity_system_init(1024);
     
-    mouse = gf2d_sprite_load("images/pointer.png",32,32, 16);
+    //mouse = gf2d_sprite_load("images/pointer.png",32,32, 16);
     
-    
-    agu = agumon_new(vector3d(10,10,10));
-    agu->scale = vector3d(5,5,5);
 //     if (agu)agu->selected = 1;
     //w = world_load("config/testworld.json");
     
@@ -80,6 +79,8 @@ int main(int argc,char *argv[])
     player = player_new(vector3d(-50,0,0));
     player->scale = vector3d(5,5,5);
     
+    enemy = enemy_new(vector3d(10,10,10),player,1);
+    enemy->scale = vector3d(5,5,5);
 //     for (a = 0; a < 100; a++)
 //     {
 //         particle[a].position = vector3d(gfc_crandom() * 100,gfc_crandom() * 100,gfc_crandom() * 100);
@@ -116,7 +117,7 @@ int main(int argc,char *argv[])
                 //world_draw(w);
                 world_draw(forest);
                 entity_draw_all();
-                
+
 //                 for (a = 0; a < 100; a++)
 //                 {
 //                     gf3d_particle_draw(&particle[a]);
@@ -126,7 +127,7 @@ int main(int argc,char *argv[])
                 gf2d_font_draw_line_tag("Press q to exit",FT_H1,gfc_color(1,1,1,1), vector2d(10,10));
                 //gf2d_draw_bezier_curve(Vector2D(0,0), Vector2D(1,1), Vector2D(2,0), Color(0,243,255,1));
                 gf2d_draw_rect(gfc_rect(10 ,10,1000,32),gfc_color8(255,255,255,255));
-                //gf2d_draw_rect_filled(gfc_rect(10,650,(int)(manaRatio)*5,32),gfc_color8(0,245,255,170));
+                gf2d_draw_rect_filled(gfc_rect(10,650,(int)(manaRatio)*5,32),gfc_color8(0,245,255,170));
                 manaRatio = (float)(player->mana)/(float)(player->manaMax)*100;
                 //slog("mana ratio: %f",manaRatio);
                 gf2d_draw_rect_filled(gfc_rect(10,650,500,32),gfc_color8(25,25,25,255));

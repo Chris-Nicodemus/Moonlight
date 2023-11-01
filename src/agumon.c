@@ -24,6 +24,8 @@ Entity *agumon_new(Vector3D position)
     ent->update = agumon_update;
     vector3d_copy(ent->position,position);
     ent->gravForce=-0.05;
+
+    ent->bounds = gfc_box(ent->position.x,ent->position.y,ent->position.z,1,1,1);
     return ent;
 }
 
@@ -36,6 +38,7 @@ void agumon_update(Entity *self)
     }
     vector3d_add(self->position,self->position,self->velocity);
     entity_gravity(self);
+    self->bounds = gfc_box(self->position.x,self->position.y,self->position.z,1,1,1);
     //self->rotation.z += 0.01;
 }
 

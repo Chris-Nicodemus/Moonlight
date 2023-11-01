@@ -1,14 +1,22 @@
 #include "simple_logger.h"
 #include "enemy.h"
 
+Entity *player = NULL;
 void enemy_update(Entity *self);
 
 void enemy_think(Entity *self);
 
-Entity *enemy_new(Vector3D pos, int enemyType)
+Entity *enemy_new(Vector3D pos, Entity *passedPlayer, int enemyType)
 {
     Entity *ent = NULL;
-    
+    if(passedPlayer && passedPlayer->player)
+    {
+        player = passedPlayer;
+    }
+    if(player)
+    {
+        slog("I have a player!");
+    }
     ent = entity_new();
     if (!ent)
     {
@@ -23,6 +31,16 @@ Entity *enemy_new(Vector3D pos, int enemyType)
     ent->gravForce = -0.05;
     ent->player=false;
     vector3d_copy(ent->position,pos);
+
+    switch (enemyType)
+    {
+        case 1:
+        ent->bounds = gfc_box(ent->position.x,ent->position.y,ent->position.z,5,5,5);
+        slog("enemy type 1");
+        break;
+        default:
+        slog("enemy switch");
+    }
     return ent;
 }
 
@@ -34,6 +52,10 @@ void enemy_update(Entity *self)
         return;
     }
     vector3d_add(self->position,self->position,self->velocity);
+    entity_gravity(self);
+    self->bounds = gfc_box(self->position.x,self->position.y,self->position.z,5,5,5);
+    if(gfc_box_overlap(self->bounds,player->bounds))
+    slog("collision!");
     //self->rotation.z += 0.01;
 }
 

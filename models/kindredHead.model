@@ -1,7 +1,7 @@
 {
     "model":
     {
-        "model":"models/kindredHead/kindredHead.obj",
+        "model":"models/kindredHead/Kindred Head.obj",
         "texture":"models/kindred/textures/TX_Mask.jpeg"
     }
 }
