@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/child/child.obj",
+        "texture":"models/child/textures/TEX_Prisoners_D.png"
+    }
+}

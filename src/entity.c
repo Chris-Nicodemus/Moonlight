@@ -183,9 +183,45 @@ Bool entity_checkBox(Entity *self, Box bounds)
             continue;
         }
 
+        if(entity_manager.entity_list[i].bounds.h == 0)
+        {
+            continue;
+        }
+
         if(gfc_box_overlap(bounds, entity_manager.entity_list[i].bounds))
         {
         //    slog("returning true");
+            return true;
+        }
+    }
+    return false;
+}
+
+Bool entity_checkSphere(Entity *self, Vector3D point)
+{
+    int i;
+
+    for(i = 0; i < entity_manager.entity_count; i++)
+    {
+        //slog("%i",i);
+        if(!entity_manager.entity_list[i]._inuse)
+        {
+            continue;
+        }
+
+        if(self==&entity_manager.entity_list[i])
+        {
+        //    slog("skipping");
+            continue;
+        }
+
+        if(entity_manager.entity_list[i].roundBounds.r == 0)
+        {
+            continue;
+        }
+
+        if(gfc_point_in_sphere(point, entity_manager.entity_list[i].roundBounds))
+        {
             return true;
         }
     }

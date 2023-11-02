@@ -54,6 +54,9 @@ typedef struct Entity_S
     //my stuff common
     float gravForce; //force of gravity for entity
     Bool player;    //true if entity is a player
+    Sphere roundBounds; //if I wanna use a round hitbox
+
+    //player specific
     int manaMax;
     int mana;
 }Entity;
@@ -122,4 +125,12 @@ void entity_gravity(Entity *self);
  * @param bounds is the actual box that is checked against the entity list
 */
 Bool entity_checkBox(Entity *self, Box bounds);
+
+
+/**
+ * @brief iterate through ent list to see if an entity collides with any sphere hitboxes
+ * @param self the entity in question
+ * @param point point that is checked against ent list
+*/
+Bool entity_checkSphere(Entity *self, Vector3D point);
 #endif

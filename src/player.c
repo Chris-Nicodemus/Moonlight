@@ -20,7 +20,7 @@ Entity *player_new(Vector3D position)
         return NULL;
     }
 
-    ent->model = gf3d_model_load("models/kindred.model");
+    ent->model = gf3d_model_load("models/child.model");
     ent->think = player_think;
     ent->update = player_update;
     vector3d_copy(ent->position,position);
@@ -30,9 +30,11 @@ Entity *player_new(Vector3D position)
     ent->hidden = 0;
     ent->player=true;
     ent->gravForce= -0.05;
-    ent->bounds = gfc_box(ent->position.x,ent->position.y,ent->position.z,5,5,5);
+    ent->bounds = gfc_box(ent->position.x,ent->position.y,ent->position.z,3,3,3);
+    ent->roundBounds = gfc_sphere(0,0,0,0);
     ent->manaMax = 100;
     ent->mana = ent->manaMax;
+    ent->scale = vector3d(7.5,7.5,7.5);
     return ent;
 }
 
@@ -48,6 +50,11 @@ Bool testPostion(Entity *self, Vector3D move)
     if(entity_checkBox(self,testBox)) 
     {
         slog("no move for collision reasons");
+        return false;
+    }
+    if(entity_checkSphere(self,testPos))
+    {
+        slog("no move cuz circles");
         return false;
     }
     return true;

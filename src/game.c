@@ -23,6 +23,7 @@
 #include "world.h"
 #include "enemy.h"
 #include "companion.h"
+#include "vase.h"
 
 extern int __DEBUG;
 
@@ -77,10 +78,12 @@ int main(int argc,char *argv[])
     slog_sync();
     gf3d_camera_set_scale(vector3d(1,1,1));
     player = player_new(vector3d(-50,0,0));
-    player->scale = vector3d(5,5,5);
+    //player->scale = vector3d(5,5,5);
     
     enemy = enemy_new(vector3d(10,10,10),player,1);
     enemy->scale = vector3d(5,5,5);
+
+    Entity *vase = vase_new(vector3d(-10,-10,0));
 //     for (a = 0; a < 100; a++)
 //     {
 //         particle[a].position = vector3d(gfc_crandom() * 100,gfc_crandom() * 100,gfc_crandom() * 100);

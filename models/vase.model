@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/vase/vase.obj",
+        "texture":"models/vase/DefaultMaterial_albedo.jpg"
+    }
+}
