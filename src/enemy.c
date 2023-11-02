@@ -2,8 +2,13 @@
 #include "enemy.h"
 
 Entity *player = NULL;
-float chaseDistance = 10;
+float chaseDistance = 50;
 float speed = 0.025;
+Bool aware = false;
+Bool inRange = false;
+uint32_t awareInterval = 3000;
+uint32_t awareThreshold = 0;
+
 void enemy_update(Entity *self);
 
 void enemy_think(Entity *self);
@@ -59,19 +64,35 @@ void enemy_update(Entity *self)
     entity_gravity(self);
     self->bounds = gfc_box(self->position.x,self->position.y,self->position.z,5,5,5);
 
-    if(vector3d_magnitude_between(self->position,player->position) <= chaseDistance)
+    if(aware)
     {
         Vector3D dir;
         dir = vector3d(player->position.x - self->position.x, player->position.y - self->position.y,0);
         vector3d_normalize(&dir);
         self->velocity.x = dir.x * speed;
         self->velocity.y = dir.y * speed;
-        /*self->velocity.x = (self->position.x + (player->position.x - self->position.x) * 0.2);
-        self->velocity.y = (self->position.y + (player->position.y - self->position.y) * 0.2); 
-        slog("Position x:%f y:%f z:%f", self->position.x,self->position.y,self->position.z);*/
-        //slog("in range");
     }
 
+    if(vector3d_magnitude_between(self->position,player->position) <= chaseDistance)
+    {
+        if(!inRange)
+        {
+            inRange = true;
+            awareThreshold = SDL_GetTicks() + awareInterval;
+            slog("In Range!");
+        }
+    }
+    else if(inRange || aware)
+    {
+        inRange = false;
+        aware = false;
+    }
+
+    if(inRange && !aware && SDL_GetTicks() > awareThreshold)
+    {
+        aware = true;
+        slog("Aware!");
+    }
     //if(gfc_box_overlap(self->bounds,player->bounds))
     //slog("collision!");
     //self->rotation.z += 0.01;
