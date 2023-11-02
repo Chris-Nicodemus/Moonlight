@@ -54,8 +54,8 @@ void enemy_update(Entity *self)
     vector3d_add(self->position,self->position,self->velocity);
     entity_gravity(self);
     self->bounds = gfc_box(self->position.x,self->position.y,self->position.z,5,5,5);
-    if(gfc_box_overlap(self->bounds,player->bounds))
-    slog("collision!");
+    //if(gfc_box_overlap(self->bounds,player->bounds))
+    //slog("collision!");
     //self->rotation.z += 0.01;
 }
 

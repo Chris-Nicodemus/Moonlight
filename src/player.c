@@ -8,7 +8,6 @@ static int thirdPersonMode = 1;
 void player_think(Entity *self);
 void player_update(Entity *self);
 
-Entity *entList;
 
 Entity *player_new(Vector3D position)
 {
@@ -20,12 +19,7 @@ Entity *player_new(Vector3D position)
         slog("UGH OHHHH, no player for you!");
         return NULL;
     }
-    entList = getManager();
-    int i;
-    for(i = 0; i < sizeof(entList); i++)
-    {
-        slog("Got an ent here");
-    }
+
     ent->model = gf3d_model_load("models/kindred.model");
     ent->think = player_think;
     ent->update = player_update;
@@ -46,12 +40,16 @@ Bool testPostion(Entity *self, Vector3D move)
 {
     Vector3D testPos = self->position;
     vector3d_add(testPos,testPos,move);
-    
+    Box testBox = gfc_box(testPos.x,testPos.y,testPos.z,self->bounds.w,self->bounds.h,self->bounds.h);
     if(testPos.x > 2100) return false;
     if(testPos.x < -2100) return false;
     if(testPos.y > 2100) return false;
     if(testPos.y < -2100) return false;
-
+    if(entity_checkBox(self,testBox)) 
+    {
+        slog("no move for collision reasons");
+        return false;
+    }
     return true;
 }
 
@@ -97,7 +95,9 @@ void player_think(Entity *self)
     }
     if (keys[SDL_SCANCODE_SPACE])
     {
-        slog("Rotation:\nx: %f\ty: %f\tz: %f",self->rotation.x,self->rotation.y,self->rotation.z);
+        //slog("Rotation:\nx: %f\ty: %f\tz: %f",self->rotation.x,self->rotation.y,self->rotation.z);
+        if(entity_checkBox(self,self->bounds)) 
+            slog("something happening in the best way!");
     }
     //if (keys[SDL_SCANCODE_Z])self->position.z -= 0.1;
     

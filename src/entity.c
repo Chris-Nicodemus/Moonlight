@@ -5,12 +5,12 @@
 
 #include "entity.h"
 
-typedef struct
+/*typedef struct
 {
     Entity *entity_list;
     Uint32  entity_count;
     
-}EntityManager;
+}EntityManager;*/
 
 EntityManager entity_manager = {0};
 
@@ -165,8 +165,30 @@ void entity_gravity(Entity *self)
     }
 }
 
-Entity *getManager()
+
+Bool entity_checkBox(Entity *self, Box bounds)
 {
-    return entity_manager.entity_list;
+    int i;
+    for(i = 0; i < entity_manager.entity_count; i++)
+    {
+        //slog("%i",i);
+        if(!entity_manager.entity_list[i]._inuse)
+        {
+            continue;
+        }
+
+        if(self==&entity_manager.entity_list[i])
+        {
+        //    slog("skipping");
+            continue;
+        }
+
+        if(gfc_box_overlap(bounds, entity_manager.entity_list[i].bounds))
+        {
+        //    slog("returning true");
+            return true;
+        }
+    }
+    return false;
 }
 /*eol@eof*/

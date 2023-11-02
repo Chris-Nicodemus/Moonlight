@@ -58,6 +58,11 @@ typedef struct Entity_S
     int mana;
 }Entity;
 
+typedef struct EntityManager_S
+{
+    Entity *entity_list;
+    Uint32  entity_count;
+}EntityManager;
 /**
  * @brief initializes the entity subsystem
  * @param maxEntities the limit on number of entities that can exist at the same time
@@ -110,4 +115,11 @@ void entity_update_all();
  * @param self the entity in question
 */
 void entity_gravity(Entity *self);
+
+/**
+ * @brief iterate through entity list to see if entity bounds collides with something else
+ * @param self the entity in question
+ * @param bounds is the actual box that is checked against the entity list
+*/
+Bool entity_checkBox(Entity *self, Box bounds);
 #endif
