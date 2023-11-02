@@ -2,6 +2,8 @@
 #include "enemy.h"
 
 Entity *player = NULL;
+float chaseDistance = 200;
+float speed = 0.025;
 void enemy_update(Entity *self);
 
 void enemy_think(Entity *self);
@@ -37,6 +39,7 @@ Entity *enemy_new(Vector3D pos, Entity *passedPlayer, int enemyType)
         case 1:
         ent->bounds = gfc_box(ent->position.x,ent->position.y,ent->position.z,5,5,5);
         slog("enemy type 1");
+        //ent->velocity.x = 1;
         break;
         default:
         slog("enemy switch");
@@ -54,6 +57,24 @@ void enemy_update(Entity *self)
     vector3d_add(self->position,self->position,self->velocity);
     entity_gravity(self);
     self->bounds = gfc_box(self->position.x,self->position.y,self->position.z,5,5,5);
+
+    if(vector3d_magnitude_between(self->position,player->position) <= chaseDistance)
+    {
+        Vector3D dir;
+        dir = vector3d(player->position.x - self->position.x, player->position.y - self->position.y,0);
+        vector3d_normalize(&dir);
+        self->velocity.x = dir.x * speed;
+        self->velocity.y = dir.y * speed;
+        /*self->velocity.x = (self->position.x + (player->position.x - self->position.x) * 0.2);
+        self->velocity.y = (self->position.y + (player->position.y - self->position.y) * 0.2); 
+        slog("Position x:%f y:%f z:%f", self->position.x,self->position.y,self->position.z);*/
+        slog("in range");
+    }
+    else
+    {
+        slog("out of range");
+    }
+
     //if(gfc_box_overlap(self->bounds,player->bounds))
     //slog("collision!");
     //self->rotation.z += 0.01;
@@ -61,7 +82,7 @@ void enemy_update(Entity *self)
 
 void enemy_think(Entity *self)
 {
-    if (!self)return;
+    if (!self)return; 
     switch(self->state)
     {
         case ES_idle:
