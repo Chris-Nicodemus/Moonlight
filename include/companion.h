@@ -8,7 +8,7 @@
  * @param position where to spawn the aguman at
  * @return NULL on error, or an companion entity pointer on success
  */
-Entity *companion_new(Vector3D position);
+Entity *companion_new(Vector3D position, Entity* passedPlayer);
 
 
 #endif

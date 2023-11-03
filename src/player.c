@@ -1,4 +1,5 @@
 #include "simple_logger.h"
+#include "gfc_input.h"
 #include "gfc_types.h"
 
 #include "gf3d_camera.h"
@@ -8,6 +9,14 @@ static int thirdPersonMode = 1;
 void player_think(Entity *self);
 void player_update(Entity *self);
 
+Entity *companion = NULL;
+//companion highlight ability
+uint32_t highlightInterval = 20000;
+uint32_t highlightCooldown = 0;
+uint32_t highlightDurationInterval = 1000;
+uint32_t highlightDuration = 0;
+float highlightRadius = 5000;
+Bool highlighted = false;
 
 Entity *player_new(Vector3D position)
 {
@@ -80,6 +89,13 @@ void player_think(Entity *self)
     right.y = w.y * 0.1;
 
     self->bounds = gfc_box(self->position.x,self->position.y,self->position.z,5,5,5);
+
+    if(highlighted && SDL_GetTicks() > highlightDuration)
+    {
+        highlighted = false;
+        entity_unhighlight();
+    }
+
     if (keys[SDL_SCANCODE_W])
     {   
         if(testPostion(self,forward))
@@ -122,6 +138,22 @@ void player_think(Entity *self)
         self->hidden = !self->hidden;
     }*/
 
+    if(gfc_input_command_pressed("highlight"))
+    {
+        if(companion && !companion->hidden)
+        {
+        //slog("1 is pressed!");
+            if(SDL_GetTicks() > highlightCooldown)
+            {
+                highlighted = true;
+                highlightCooldown = SDL_GetTicks() + highlightInterval;
+
+                highlightDuration = SDL_GetTicks() + highlightDurationInterval;
+
+                entity_highlight(self, companion, highlightRadius);
+            }
+        }
+    }
     entity_gravity(self);
 }
 
@@ -149,4 +181,13 @@ void player_update(Entity *self)
     gf3d_camera_set_rotation(rotation);
 }
 
+Bool player_getCompanion(Entity *player, Entity *passedCompanion)
+{
+    companion = passedCompanion;
+    if(companion)
+    {
+        return true;
+    }
+    return false;
+}
 /*eol@eof*/

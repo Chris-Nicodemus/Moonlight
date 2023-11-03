@@ -32,7 +32,8 @@ Entity *enemy_new(Vector3D pos, Entity *passedPlayer, int enemyType)
     }
     ent->selectedColor = gfc_color(0.1,1,0.1,1.0);
     ent->color = gfc_color(1,1,1,1);
-    ent->model = gf3d_model_load("models/kindred.model");
+    
+    //ent->model = gf3d_model_load("models/kindred.model");
     ent->think = enemy_think;
     ent->update = enemy_update;
     ent->gravForce = -0.05;
@@ -43,6 +44,8 @@ Entity *enemy_new(Vector3D pos, Entity *passedPlayer, int enemyType)
     {
         case 1:
         ent->bounds = gfc_box(ent->position.x,ent->position.y,ent->position.z,5,5,5);
+        ent->model = gf3d_model_load("models/centurion.model");
+        ent->scale=vector3d(10,10,10);
         ent->roundBounds = gfc_sphere(0,0,0,0);
         slog("enemy type 1");
         //ent->velocity.x = 1;
@@ -86,6 +89,7 @@ void enemy_update(Entity *self)
     {
         inRange = false;
         aware = false;
+        self->velocity = vector3d(0,0,0);
     }
 
     if(inRange && !aware && SDL_GetTicks() > awareThreshold)

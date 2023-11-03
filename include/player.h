@@ -10,4 +10,11 @@
  */
 Entity *player_new(Vector3D position);
 
+/**
+ * @brief set player companion variable to passedCompanion
+ * @param player player in question
+ * @param passedCompanion entity that will be bound to player
+ * @return true if successful and false if not
+*/
+Bool player_getCompanion(Entity *player, Entity *passedCompanion);
 #endif

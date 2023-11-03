@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/centurion/Centurion.obj",
+        "texture":"models/centurion/Legion_centurion_texture.jpg"
+    }
+}

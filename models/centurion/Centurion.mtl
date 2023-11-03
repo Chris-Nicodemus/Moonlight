@@ -1,0 +1,260 @@
+# Blender MTL File: 'None'
+# Material Count: 22
+
+newmtl Armour_top_20
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.894118 0.513726 0.988235
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Armour_top_2_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Armour_top_2_TXTR.jpg
+
+newmtl Armour_top_21
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.952941 0.792157 0.549020
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Armour_top_2_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Armour_top_2_TXTR.jpg
+
+newmtl Dangles0
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.533333 0.576471 0.968627
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Dangles_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Dangles_TXTR.jpg
+
+newmtl Full_figure_49_posed_040
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.945098 0.847059 0.556863
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Full_figure_49_posed_04_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Full_figure_49_posed_04_TXTR.jpg
+
+newmtl Helmet30
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.964706 0.537255 0.858824
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Helmet3_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Helmet3_TXTR.jpg
+
+newmtl Helmet31
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.505882 0.556863 0.996078
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Helmet3_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Helmet3_TXTR.jpg
+
+newmtl New_arms0
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.611765 0.980392 0.521569
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/New_arms_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/New_arms_TXTR.jpg
+
+newmtl New_eye10
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.933333 0.568627 0.843137
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/New_eye1_TXTR.jpg
+
+newmtl New_eye20
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.933333 0.568627 0.843137
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/New_eye2_TXTR.jpg
+
+newmtl New_head0
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.549020 0.831373 0.952941
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/New_head_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/New_head_TXTR.jpg
+
+newmtl New_legs0
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.882353 0.533333 0.968627
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/New_legs_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/New_legs_TXTR.jpg
+
+newmtl Scabbard0
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.827451 0.501961 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Scabbard_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Scabbard_TXTR.jpg
+
+newmtl Scabbard1
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.964706 0.537255 0.921569
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Scabbard_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Scabbard_TXTR.jpg
+
+newmtl Scutum_04_020
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.564706 0.600000 0.937255
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Scutum_04_02_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Scutum_04_02_TXTR.jpg
+
+newmtl Scutum_04_021
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.674510 0.501961 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Scutum_04_02_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Scutum_04_02_TXTR.jpg
+
+newmtl Sword2_10
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.921569 0.564706 0.937255
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Sword2_1_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Sword2_1_TXTR.jpg
+
+newmtl Sword2_11
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.537255 0.964706 0.709804
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Sword2_1_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Sword2_1_TXTR.jpg
+
+newmtl Teeth30
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.592157 0.925490 0.576471
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Teeth3_TXTR.jpg
+
+newmtl Tie0
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.956863 0.545098 0.792157
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Tunic_10
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.501961 0.501961
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Tunic_1_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Tunic_1_TXTR.jpg
+
+newmtl UMesh_Boot340
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.878431 0.964706 0.537255
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/UMesh_Boot34_NM.jpg
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/UMesh_Boot34_TXTR.jpg
+
+newmtl Wrist_guard20
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.533333 0.968627 0.576471
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd /home/chris/Downloads/roman-soldier-fighting-pose-3d-printable/source/Old man head 12 FBX test/Wrist_guard2_TXTR.jpg

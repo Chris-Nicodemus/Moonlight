@@ -154,6 +154,10 @@ void entity_update_all()
 
 void entity_gravity(Entity *self)
 {
+    if(!self)
+    {
+        slog("gravity failed cuz no self");
+    }
     if(self->position.z > 0)
     {
         self->position.z = self->position.z + self->gravForce;
@@ -168,6 +172,11 @@ void entity_gravity(Entity *self)
 
 Bool entity_checkBox(Entity *self, Box bounds)
 {
+    if(!self)
+    {
+        slog("entity checkbox messed up because of self problem");
+        return false;
+    }
     int i;
     for(i = 0; i < entity_manager.entity_count; i++)
     {
@@ -199,8 +208,11 @@ Bool entity_checkBox(Entity *self, Box bounds)
 
 Bool entity_checkSphere(Entity *self, Vector3D point)
 {
+    if(!self)
+    {
+        slog("entity checksphere messed up cuz of self problem");
+    }
     int i;
-
     for(i = 0; i < entity_manager.entity_count; i++)
     {
         //slog("%i",i);
@@ -226,5 +238,47 @@ Bool entity_checkSphere(Entity *self, Vector3D point)
         }
     }
     return false;
+}
+
+void entity_highlight(Entity *self, Entity *exclude, float radius)
+{
+    if(!self || !exclude)
+    {
+        slog("entity highlight messed up cuz of self or exclude problem");
+    }
+
+    int i;
+    for(i = 0; i < entity_manager.entity_count; i++)
+    {
+        if(!entity_manager.entity_list[i]._inuse)
+        {
+            continue;
+        }
+
+        if(self==&entity_manager.entity_list[i] || exclude==&entity_manager.entity_list[i])
+        {
+        //    slog("skipping");
+            continue;
+        }
+
+        if(vector3d_magnitude_between(self->position,entity_manager.entity_list[i].position) <= radius)
+        {
+            entity_manager.entity_list[i].selected = 1;
+        }
+    }
+}
+
+void entity_unhighlight()
+{
+    int i;
+    for(i = 0; i < entity_manager.entity_count; i++)
+    {
+        if(!entity_manager.entity_list[i]._inuse)
+        {
+            continue;
+        }
+
+        entity_manager.entity_list[i].selected = 0;
+    }
 }
 /*eol@eof*/

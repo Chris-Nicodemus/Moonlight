@@ -133,4 +133,17 @@ Bool entity_checkBox(Entity *self, Box bounds);
  * @param point point that is checked against ent list
 */
 Bool entity_checkSphere(Entity *self, Vector3D point);
+
+/**
+ * @brief highlight all entities except for self and exclude within radius of self
+ * @param self entity in question
+ * @param exclude entity that will not highlight
+ * @param radius distance of things that will highlight
+*/
+void entity_highlight(Entity *self, Entity *exclude, float radius);
+
+/**
+ * @brief iterate through ent list and unhighlight all ents
+*/
+void entity_unhighlight();
 #endif

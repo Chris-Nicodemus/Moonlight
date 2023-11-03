@@ -78,10 +78,13 @@ int main(int argc,char *argv[])
     slog_sync();
     gf3d_camera_set_scale(vector3d(1,1,1));
     player = player_new(vector3d(-50,0,0));
+
+    Entity *companion = companion_new(vector3d(-40,0,10),player);
     //player->scale = vector3d(5,5,5);
-    
+    if(player_getCompanion(player,companion))
+    slog("companion recieved");
     enemy = enemy_new(vector3d(10,10,10),player,1);
-    enemy->scale = vector3d(5,5,5);
+    //enemy->scale = vector3d(10,10,10);
 
     Entity *vase = vase_new(vector3d(-10,-10,0));
 //     for (a = 0; a < 100; a++)
