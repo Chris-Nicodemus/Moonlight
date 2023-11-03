@@ -55,6 +55,9 @@ typedef struct Entity_S
     float gravForce; //force of gravity for entity
     Bool player;    //true if entity is a player
     Sphere roundBounds; //if I wanna use a round hitbox
+    Bool stunned;   //if you are in the stunned state
+    uint32_t stunDuration; //how long till you're un-stunned
+    int type;   //type of enemy you are. If not hostile, type is 0
 
     //player specific
     int manaMax;

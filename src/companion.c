@@ -27,7 +27,8 @@ Entity *companion_new(Vector3D position, Entity *passedPlayer)
     ent->scale = vector3d(5,5,5);
     companionPlayer = passedPlayer;
     vector3d_copy(ent->position,position);
-    ent->gravForce=0;
+    ent->gravForce = 0;
+    ent->type = 0;
     return ent;
 }
 

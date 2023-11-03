@@ -1,5 +1,6 @@
 #include "simple_logger.h"
 #include "enemy.h"
+#include "player.h"
 
 Entity *player = NULL;
 float chaseDistance = 50;
@@ -37,7 +38,9 @@ Entity *enemy_new(Vector3D pos, Entity *passedPlayer, int enemyType)
     ent->think = enemy_think;
     ent->update = enemy_update;
     ent->gravForce = -0.05;
-    ent->player=false;
+    ent->player= false;
+    ent->stunned = false;
+    ent->type = enemyType;
     vector3d_copy(ent->position,pos);
 
     switch (enemyType)
@@ -66,17 +69,33 @@ void enemy_update(Entity *self)
     vector3d_add(self->position,self->position,self->velocity);
     entity_gravity(self);
     self->bounds = gfc_box(self->position.x,self->position.y,self->position.z,5,5,5);
+    //self->rotation.z += 0.01;
+}
 
-    if(aware)
+void enemy_think(Entity *self)
+{
+    //slog("thinking");
+    if (!self)return; 
+    if(self->stunned && SDL_GetTicks() > self->stunDuration)
+    {
+        self->stunned = false;
+    }
+
+    if(!self-> stunned && aware)
     {
         Vector3D dir;
         dir = vector3d(player->position.x - self->position.x, player->position.y - self->position.y,0);
         vector3d_normalize(&dir);
         self->velocity.x = dir.x * speed;
         self->velocity.y = dir.y * speed;
+
+        if(gfc_box_overlap(self->bounds,player->bounds))
+        {
+            player_touch(player,self,self->type);
+        }
     }
 
-    if(vector3d_magnitude_between(self->position,player->position) <= chaseDistance)
+    if(!self->stunned && vector3d_magnitude_between(self->position,player->position) <= chaseDistance)
     {
         if(!inRange)
         {
@@ -96,28 +115,5 @@ void enemy_update(Entity *self)
     {
         aware = true;
         slog("Aware!");
-    }
-    //if(gfc_box_overlap(self->bounds,player->bounds))
-    //slog("collision!");
-    //self->rotation.z += 0.01;
-}
-
-void enemy_think(Entity *self)
-{
-    if (!self)return; 
-    switch(self->state)
-    {
-        case ES_idle:
-            //look for player
-            break;
-        case ES_hunt:
-            // set move towards player
-            break;
-        case ES_dead:
-            // remove myself from the system
-            break;
-        case ES_attack:
-            // run through attack animation / deal damage
-            break;
     }
 }

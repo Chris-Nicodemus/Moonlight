@@ -18,6 +18,9 @@ uint32_t highlightDuration = 0;
 float highlightRadius = 5000;
 Bool highlighted = false;
 
+//companion sacrifice ability
+uint32_t sacrificeCooldown = 500000;
+uint32_t sacrificeRevive = 0;
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
@@ -43,6 +46,8 @@ Entity *player_new(Vector3D position)
     ent->roundBounds = gfc_sphere(0,0,0,0);
     ent->manaMax = 100;
     ent->mana = ent->manaMax;
+    ent->type = 0;
+    ent->stunned = false;
     ent->scale = vector3d(7.5,7.5,7.5);
     return ent;
 }
@@ -96,6 +101,11 @@ void player_think(Entity *self)
         entity_unhighlight();
     }
 
+    if(companion->hidden && SDL_GetTicks() > sacrificeRevive)
+    {
+        slog("triggering");
+        companion->hidden = !companion->hidden;
+    }
     if (keys[SDL_SCANCODE_W])
     {   
         if(testPostion(self,forward))
@@ -119,8 +129,9 @@ void player_think(Entity *self)
     if (keys[SDL_SCANCODE_SPACE])
     {
         //slog("Rotation:\nx: %f\ty: %f\tz: %f",self->rotation.x,self->rotation.y,self->rotation.z);
-        if(entity_checkBox(self,self->bounds)) 
-            slog("something happening in the best way!");
+        //if(entity_checkBox(self,self->bounds)) 
+        //    slog("something happening in the best way!");
+        companion->hidden = !companion->hidden;
     }
     //if (keys[SDL_SCANCODE_Z])self->position.z -= 0.1;
     
@@ -189,5 +200,49 @@ Bool player_getCompanion(Entity *player, Entity *passedCompanion)
         return true;
     }
     return false;
+}
+
+Bool player_touch(Entity *player, Entity *inflictor, int type)
+{
+    if(!player || !inflictor)
+    {
+        slog("player touch failed because missing pointer");
+    }
+
+    if(!companion)
+    {
+        slog("You die!");
+        return true;
+    }
+
+    if(!companion->hidden)
+    {
+        //companion sacrifice
+        sacrificeRevive = SDL_GetTicks() + sacrificeCooldown;
+        companion->hidden = !companion->hidden;
+        
+
+        if(companion->hidden)
+        {
+            slog("successfully hidden");
+        }
+        else
+        {
+            slog("failure");
+        }
+        //send enemy backwards and stun
+        Vector3D backwards;
+        vector3d_add(backwards,inflictor->velocity,inflictor->velocity);
+        vector3d_sub(inflictor->position, inflictor->position, backwards);
+        inflictor->stunDuration = SDL_GetTicks() + 2000;
+        inflictor->stunned = true;
+        
+
+
+        slog("companion save!");
+        return false;
+    }
+
+    return true;
 }
 /*eol@eof*/
