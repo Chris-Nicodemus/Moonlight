@@ -21,6 +21,10 @@ Bool highlighted = false;
 //companion sacrifice ability
 uint32_t sacrificeCooldown = 500000;
 uint32_t sacrificeRevive = 0;
+
+//jump ability
+uint32_t fall = 0;
+int jumpCost = 10;
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
@@ -95,6 +99,15 @@ void player_think(Entity *self)
 
     self->bounds = gfc_box(self->position.x,self->position.y,self->position.z,5,5,5);
 
+    if(self->gravForce != -0.05 && SDL_GetTicks() > fall)
+    {
+        self->gravForce = self->gravForce - 0.01;
+        if(self->gravForce < -0.05)
+        {
+            self->gravForce = -0.05;
+        }
+    }
+
     if(highlighted && SDL_GetTicks() > highlightDuration)
     {
         highlighted = false;
@@ -131,7 +144,7 @@ void player_think(Entity *self)
         //slog("Rotation:\nx: %f\ty: %f\tz: %f",self->rotation.x,self->rotation.y,self->rotation.z);
         //if(entity_checkBox(self,self->bounds)) 
         //    slog("something happening in the best way!");
-        companion->hidden = !companion->hidden;
+        //companion->hidden = !companion->hidden;
     }
     //if (keys[SDL_SCANCODE_Z])self->position.z -= 0.1;
     
@@ -165,6 +178,15 @@ void player_think(Entity *self)
             }
         }
     }
+
+    if(gfc_input_command_pressed("jump") && self->mana >= jumpCost && self->position.z == 0)
+    {
+        slog("jump");
+        self->mana = self->mana - jumpCost;
+        fall = SDL_GetTicks() + 1000;
+        self->gravForce =self->gravForce * -1;
+    }
+
     entity_gravity(self);
 }
 
@@ -181,12 +203,16 @@ void player_update(Entity *self)
     vector3d_copy(rotation,self->rotation);
     if (thirdPersonMode)
     {
-        position.z += 50;
+        position.z += 40;
+        position.y += 10;
         rotation.x += M_PI*0.125;
         w = vector2d_from_angle(self->rotation.z);
         forward.x = w.x * 100;
         forward.y = w.y * 100;
         vector3d_add(position,position,-forward);
+
+        //self->rotation.y = GFC_PI;
+        self->rotation.x = -GFC_PI;
     }
     gf3d_camera_set_position(position);
     gf3d_camera_set_rotation(rotation);

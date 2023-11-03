@@ -158,10 +158,9 @@ void entity_gravity(Entity *self)
     {
         slog("gravity failed cuz no self");
     }
-    if(self->position.z > 0)
-    {
-        self->position.z = self->position.z + self->gravForce;
-    }
+    
+    self->position.z = self->position.z + self->gravForce;
+    
 
     if(self->position.z < 0)
     {
