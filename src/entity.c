@@ -52,8 +52,8 @@ Entity *entity_new()
             entity_manager.entity_list[i].scale.y = 1;
             entity_manager.entity_list[i].scale.z = 1;
             
-            entity_manager.entity_list[i].color = gfc_color(1,1,1,1);
-            entity_manager.entity_list[i].selectedColor = gfc_color(1,1,1,1);
+            entity_manager.entity_list[i].color = gfc_color8(255,255,255,255);
+            entity_manager.entity_list[i].selectedColor = gfc_color8(255,255,255,255);
 /*            if(!entity_manager.entity_list[i].gravForce)
             {
                 entity_manager.entity_list[i].gravForce = -0.05;

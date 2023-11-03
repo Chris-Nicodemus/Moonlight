@@ -62,6 +62,9 @@ typedef struct Entity_S
     //player specific
     int manaMax;
     int mana;
+    Bool hiding;
+    Bool invisible;
+    Color shadow;
 }Entity;
 
 typedef struct EntityManager_S

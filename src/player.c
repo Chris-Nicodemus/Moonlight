@@ -25,6 +25,11 @@ uint32_t sacrificeRevive = 0;
 //jump ability
 uint32_t fall = 0;
 int jumpCost = 10;
+
+//shade ability
+uint32_t shadeDuration = 0;
+uint32_t nextColorTick = 0;
+int invisCost = 30;
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
@@ -52,6 +57,9 @@ Entity *player_new(Vector3D position)
     ent->mana = ent->manaMax;
     ent->type = 0;
     ent->stunned = false;
+    ent->hiding = false;
+    ent->invisible = false;
+    ent->shadow = gfc_color8(114,0,182,179);
     ent->scale = vector3d(7.5,7.5,7.5);
     return ent;
 }
@@ -78,6 +86,42 @@ Bool testPostion(Entity *self, Vector3D move)
     return true;
 }
 
+void transitionToShadow(Entity *self)
+{
+    if(!self)
+        return;
+
+    nextColorTick = SDL_GetTicks() + 10;
+
+    if(self->color.r > self->shadow.r)
+        self->color.r = self->color.r - 1;
+
+    if(self->color.b > self->shadow.b)
+        self->color.b = self->color.b - 1;
+
+    if(self->color.a > self->shadow.a)
+        self->color.a = self->color.a - 1;
+}
+
+void transitionToWhite(Entity *self)
+{
+    if(!self)
+        return;
+
+    nextColorTick = SDL_GetTicks() + 10;
+
+    if(self->color.r < 255)
+        self->color.r = self->color.r + 1;
+
+    if(self->color.g < 255)
+        self->color.g = self->color.g + 1;
+
+    if(self->color.b < 255)
+        self->color.b = self->color.b + 1;
+
+    if(self->color.a < 255)
+        self->color.a = self->color.a + 1;
+}
 void player_think(Entity *self)
 {
     Vector3D forward = {0};
@@ -101,11 +145,30 @@ void player_think(Entity *self)
 
     if(self->gravForce != -0.05 && SDL_GetTicks() > fall)
     {
-        self->gravForce = self->gravForce - 0.01;
+        self->gravForce = self->gravForce - 0.005;
         if(self->gravForce < -0.05)
         {
             self->gravForce = -0.05;
         }
+    }
+
+    if(self->invisible)
+    {
+        if(shadeDuration < SDL_GetTicks())
+        {
+            self->invisible = false;
+            //self->color = gfc_color8(255,255,255,255);
+        }
+
+        if(gfc_color_cmp(self->color,self->shadow) == 0 && nextColorTick < SDL_GetTicks())
+        {
+            transitionToShadow(self);
+        }
+    }
+
+    if(gfc_color_cmp(self->color,gfc_color8(255,255,255,255)) == 0 && !self->invisible)
+    {
+        transitionToWhite(self);
     }
 
     if(highlighted && SDL_GetTicks() > highlightDuration)
@@ -145,6 +208,7 @@ void player_think(Entity *self)
         //if(entity_checkBox(self,self->bounds)) 
         //    slog("something happening in the best way!");
         //companion->hidden = !companion->hidden;
+        //self->color = self->shadow;
     }
     //if (keys[SDL_SCANCODE_Z])self->position.z -= 0.1;
     
@@ -181,10 +245,18 @@ void player_think(Entity *self)
 
     if(gfc_input_command_pressed("jump") && self->mana >= jumpCost && self->position.z == 0)
     {
-        slog("jump");
+        //slog("shadow colors: r:%f g:%f b:%f a:%f",self->color.r,self->color.g,self->color.b,self->color.a);
         self->mana = self->mana - jumpCost;
         fall = SDL_GetTicks() + 1000;
         self->gravForce =self->gravForce * -1;
+    }
+
+    if(gfc_input_command_pressed("shadow") && !self->invisible && self->mana >= invisCost)
+    {
+        self->mana = self->mana - invisCost;
+        shadeDuration = SDL_GetTicks() + 5000;
+        self->invisible = true;
+        self->color.g = 0;
     }
 
     entity_gravity(self);
