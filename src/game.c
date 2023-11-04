@@ -38,10 +38,10 @@ int main(int argc,char *argv[])
     float mouseFrame = 0;
     //World *w;
     Entity *enemy;
-    //Particle particle[100];
+    Particle particle[100];
     Matrix4 skyMat;
     Model *sky;
-
+    extern Particle stars[300];
     World *forest;
 
     Entity*player;
@@ -88,13 +88,19 @@ int main(int argc,char *argv[])
 
     Entity *vase = vase_new(vector3d(-10,-10,0));
     vase->exitPosition = vector3d(-17.2,-18.6,0);
-//     for (a = 0; a < 100; a++)
-//     {
-//         particle[a].position = vector3d(gfc_crandom() * 100,gfc_crandom() * 100,gfc_crandom() * 100);
-//         particle[a].color = gfc_color(0,0,0,1);
-//         particle[a].color = gfc_color(gfc_random(),gfc_random(),gfc_random(),1);
-//         particle[a].size = 100 * gfc_random();
-//     }
+
+     /*for (a = 0; a < 100; a++)
+    {
+        particle[a].position = vector3d(gfc_crandom() * 10,gfc_crandom() * 10,gfc_crandom() * 10);
+        //particle[a].color = gfc_color(0,0,0,1);
+        particle[a].color = gfc_color(gfc_random(),gfc_random(),gfc_random(),1);
+        particle[a].size = 100 * gfc_random();
+    }*/
+
+    /*for(a = 0; a < 300; a++)
+    {
+        slog("%f",stars[a].position.x);
+    }*/
     a = 0;
     sky = gf3d_model_load("models/sky.model");
     gfc_matrix_identity(skyMat);
@@ -124,11 +130,13 @@ int main(int argc,char *argv[])
                 //world_draw(w);
                 world_draw(forest);
                 entity_draw_all();
-
-//                 for (a = 0; a < 100; a++)
-//                 {
-//                     gf3d_particle_draw(&particle[a]);
-//                 }
+            if(player->starsOn)
+            {
+                for (a = 0; a < 300; a++)
+                {
+                    gf3d_particle_draw(&stars[a]);
+                }
+            }
             //2D draws
                 gf2d_draw_rect_filled(gfc_rect(10 ,10,1000,32),gfc_color8(128,128,128,255));
                 gf2d_font_draw_line_tag("Press q to exit",FT_H1,gfc_color(1,1,1,1), vector2d(10,10));
@@ -150,6 +158,14 @@ int main(int argc,char *argv[])
                 //gf2d_sprite_draw(mouse,vector2d(mousex,mousey),vector2d(2,2),vector3d(8,8,0),gfc_color(0.3,.9,1,0.9),(Uint32)mouseFrame);
         gf3d_vgraphics_render_end();
 
+        /*if(gfc_input_command_pressed("jump"))
+        {
+            int i;
+            for(i = 0; i < 100; i++)
+            {
+                particle[a].color = gfc_color8(0,0,0,0);
+            }
+        }*/
         if (gfc_input_command_down("exit"))done = 1; // exit condition
     }    
     

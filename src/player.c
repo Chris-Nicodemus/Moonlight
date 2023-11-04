@@ -3,6 +3,7 @@
 #include "gfc_types.h"
 
 #include "gf3d_camera.h"
+#include "gf3d_particle.h"
 #include "player.h"
 
 static int thirdPersonMode = 1;
@@ -42,6 +43,14 @@ uint32_t dashCooldown = 0;
 uint32_t dashCDInterval = 500;
 int dashCost = 5;
 
+//starry night ability
+Particle stars[300];
+int starCost = 40;
+uint32_t starCooldown = 0;
+uint32_t starsOff = 0;
+uint32_t starCDInterval = 20000;
+uint32_t starLife = 2000;
+float starRadius = 200;
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
@@ -71,8 +80,16 @@ Entity *player_new(Vector3D position)
     ent->stunned = false;
     ent->hiding = false;
     ent->invisible = false;
+    ent->starsOn = false;
     ent->shadow = gfc_color8(114,0,182,179);
     ent->scale = vector3d(7.5,7.5,7.5);
+
+    int i;
+    for(i = 0; i < 300; i++)
+    {
+        stars[i].color = gfc_color(gfc_random(),gfc_random(),gfc_random(),0);
+        stars[i].size = gfc_random() * 30;
+    }
     return ent;
 }
 
@@ -172,6 +189,15 @@ void player_think(Entity *self)
             self->gravForce = -0.05;
         }
     }
+    if(self->starsOn && starsOff < SDL_GetTicks())
+    {
+        int i;
+        for(i = 0; i < 300; i++)
+        {
+            stars[i].color.a = 0;
+        }
+        self->starsOn = false;
+    }
 
     if(self->invisible)
     {
@@ -252,6 +278,24 @@ void player_think(Entity *self)
             dash = true;
             self->mana = self->mana - dashCost;
             dashCooldown = SDL_GetTicks() + dashCDInterval;
+        }
+
+        if(gfc_input_command_pressed("star") && starCooldown < SDL_GetTicks() && self->mana >= starCost)
+        {
+            self->mana = self->mana - starCost;
+            int i;
+            for(i = 0; i < 300; i++)
+            {
+                float x,y,z;
+                x = self->position.x + (gfc_crandom() * starRadius);
+                y = self->position.y + (gfc_crandom() * starRadius);
+                z = self->position.z + (gfc_crandom() * 50);
+                stars[i].position = vector3d(x,y,z);
+                stars[i].color.a = 1;
+            }
+            starCooldown = SDL_GetTicks() + starCDInterval;
+            starsOff = SDL_GetTicks() + starLife;
+            self->starsOn = true;
         }
     }
     if (keys[SDL_SCANCODE_SPACE])

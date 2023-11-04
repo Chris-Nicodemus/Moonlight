@@ -77,6 +77,7 @@ typedef struct Entity_S
     Bool hiding;
     Bool invisible;
     Color shadow;
+    Bool starsOn;
 }Entity;
 
 typedef struct EntityManager_S

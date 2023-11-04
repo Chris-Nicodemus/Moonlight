@@ -1,7 +1,7 @@
 {
     "model":
     {
-        "model":"models/plain/plain.obj",
+        "model":"models/plain/Plain.obj",
         "texture":"models/plain/cuteGrass.jpg"
     }
 }
