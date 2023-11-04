@@ -62,6 +62,10 @@ typedef struct Entity_S
     //enemy specific
     Bool aware;
     Bool inRange;
+    uint32_t awareInterval;
+    uint32_t awareThreshold;
+    float chaseDistance;
+    float speed;
 
     //player specific
     int manaMax;

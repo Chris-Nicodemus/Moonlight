@@ -3,10 +3,8 @@
 #include "player.h"
 
 Entity *player = NULL;
-float chaseDistance = 50;
-float speed = 0.025;
-uint32_t awareInterval = 3000;
-uint32_t awareThreshold = 0;
+float chaseDistance1 = 50;
+float speed1 = 0.025;
 
 void enemy_update(Entity *self);
 
@@ -40,6 +38,7 @@ Entity *enemy_new(Vector3D pos, Entity *passedPlayer, int enemyType)
     ent->stunned = false;
     ent->aware = false;
     ent->type = enemyType;
+    ent->awareThreshold = 0;
     vector3d_copy(ent->position,pos);
 
     switch (enemyType)
@@ -49,6 +48,9 @@ Entity *enemy_new(Vector3D pos, Entity *passedPlayer, int enemyType)
         ent->model = gf3d_model_load("models/centurion.model");
         ent->scale=vector3d(10,10,10);
         ent->roundBounds = gfc_sphere(0,0,0,0);
+        ent->awareInterval = 3000;
+        ent->chaseDistance = chaseDistance1;
+        ent->speed = speed1;
         slog("enemy type 1");
         //ent->velocity.x = 1;
         break;
@@ -87,8 +89,8 @@ void enemy_think(Entity *self)
             Vector3D dir;
             dir = vector3d(player->position.x - self->position.x, player->position.y - self->position.y,0);
             vector3d_normalize(&dir);
-            self->velocity.x = dir.x * speed;
-            self->velocity.y = dir.y * speed;
+            self->velocity.x = dir.x * self->speed;
+            self->velocity.y = dir.y * self->speed;
 
             if(gfc_box_overlap(self->bounds,player->bounds))
             {
@@ -96,12 +98,12 @@ void enemy_think(Entity *self)
             }
         }
 
-        if(vector3d_magnitude_between(self->position,player->position) <= chaseDistance)
+        if(vector3d_magnitude_between(self->position,player->position) <= self->chaseDistance)
         {
             if(!self->inRange)
             {
                 self->inRange = true;
-                awareThreshold = SDL_GetTicks() + awareInterval;
+                self->awareThreshold = SDL_GetTicks() + self->awareInterval;
                 slog("In Range!");
             }
         }
@@ -112,14 +114,14 @@ void enemy_think(Entity *self)
             self->velocity = vector3d(0,0,0);
         }
 
-        if(self->inRange && !self->aware && SDL_GetTicks() > awareThreshold)
+        if(self->inRange && !self->aware && SDL_GetTicks() > self->awareThreshold)
         {
             self->aware = true;
             slog("Aware!");
         }
     }
 
-    if(player->invisible && self->aware)
+    if((player->invisible || self->stunned) && self->aware)
     {
         self->aware = false;
         self->velocity = vector3d(0,0,0);
