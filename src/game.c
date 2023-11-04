@@ -87,6 +87,7 @@ int main(int argc,char *argv[])
     //enemy->scale = vector3d(10,10,10);
 
     Entity *vase = vase_new(vector3d(-10,-10,0));
+    vase->exitPosition = vector3d(-17.2,-18.6,0);
 //     for (a = 0; a < 100; a++)
 //     {
 //         particle[a].position = vector3d(gfc_crandom() * 100,gfc_crandom() * 100,gfc_crandom() * 100);

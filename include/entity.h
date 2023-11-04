@@ -52,20 +52,24 @@ typedef struct Entity_S
     void *customData;   /**<IF an entity needs to keep track of extra data, we can do it here*/
 
     //my stuff common
-    float gravForce; //force of gravity for entity
-    Bool player;    //true if entity is a player
-    Sphere roundBounds; //if I wanna use a round hitbox
-    Bool stunned;   //if you are in the stunned state
-    uint32_t stunDuration; //how long till you're un-stunned
-    int type;   //type of enemy you are. If not hostile, type is 0
+    float       gravForce; //force of gravity for entity
+    Bool        player;    //true if entity is a player
+    Sphere      roundBounds; //if I wanna use a round hitbox
+    Bool        stunned;   //if you are in the stunned state
+    uint32_t    stunDuration; //how long till you're un-stunned
+    int         type;   //type of enemy you are. If not hostile, type is 0
 
     //enemy specific
-    Bool aware;
-    Bool inRange;
-    uint32_t awareInterval;
-    uint32_t awareThreshold;
-    float chaseDistance;
-    float speed;
+    Bool        aware;
+    Bool        inRange;
+    uint32_t    awareInterval;
+    uint32_t    awareThreshold;
+    float       chaseDistance;
+    float       speed;
+
+    //item specific
+    Vector3D    exitPosition; //where you show up when leave a vase
+    Bool        vase; //proof that ent is a vase
 
     //player specific
     int manaMax;
@@ -160,4 +164,12 @@ void entity_highlight(Entity *self, Entity *exclude, float radius);
  * @brief iterate through ent list and unhighlight all ents
 */
 void entity_unhighlight();
+
+/**
+ * @brief iterate through all entities to find closest usable item
+ * @param self entity in question
+ * @param radius distance where an item is usable
+ * @return reference to closest usable item, NULL if none available
+*/
+Entity *entity_find_item(Entity* self, float radius);
 #endif

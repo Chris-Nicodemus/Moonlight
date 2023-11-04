@@ -24,6 +24,7 @@ Entity *vase_new(Vector3D position)
     vector3d_copy(ent->position,position);
     ent->gravForce=-0.05;
     ent->type = 0;
+    ent->vase = true;
 
     //ent->bounds = gfc_box(ent->position.x-0.2,ent->position.y-0.2,ent->position.z,2,1,2);
     ent->roundBounds = gfc_sphere(ent->position.x,ent->position.y,ent->position.z, 6);

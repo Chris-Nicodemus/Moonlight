@@ -21,7 +21,11 @@ Bool highlighted = false;
 //companion sacrifice ability
 uint32_t sacrificeCooldown = 500000;
 uint32_t sacrificeRevive = 0;
+Bool sacrificed = false;
 
+//item stuff
+float itemRadius = 50;
+Entity *item = NULL;
 //jump ability
 uint32_t fall = 0;
 int jumpCost = 10;
@@ -165,7 +169,7 @@ void player_think(Entity *self)
             transitionToShadow(self);
         }
     }
-
+    
     if(gfc_color_cmp(self->color,gfc_color8(255,255,255,255)) == 0 && !self->invisible)
     {
         transitionToWhite(self);
@@ -177,30 +181,54 @@ void player_think(Entity *self)
         entity_unhighlight();
     }
 
-    if(companion->hidden && SDL_GetTicks() > sacrificeRevive)
+    if(sacrificed && SDL_GetTicks() > sacrificeRevive)
     {
         slog("triggering");
-        companion->hidden = !companion->hidden;
+        if(!self->hiding)
+        {
+            companion->hidden = 0;
+        }
+        sacrificed = false;
     }
-    if (keys[SDL_SCANCODE_W])
-    {   
-        if(testPostion(self,forward))
-        vector3d_add(self->position,self->position,forward);
-    }
-    if (keys[SDL_SCANCODE_S])
+
+
+    if(!self->hiding && !self->stunned)
     {
-        if(testPostion(self,vector3d(-forward.x,-forward.y,-forward.z)))
-        vector3d_add(self->position,self->position,-forward);        
-    }
-    if (keys[SDL_SCANCODE_D])
-    {
-        if(testPostion(self,right))
-        vector3d_add(self->position,self->position,right);
-    }
-    if (keys[SDL_SCANCODE_A])    
-    {
-        if(testPostion(self,vector3d(-right.x,-right.y,-right.z)))
-        vector3d_add(self->position,self->position,-right);
+        if (keys[SDL_SCANCODE_W])
+        {   
+            if(testPostion(self,forward))
+                vector3d_add(self->position,self->position,forward);
+        }
+        if (keys[SDL_SCANCODE_S])
+        {
+            if(testPostion(self,vector3d(-forward.x,-forward.y,-forward.z)))
+                vector3d_add(self->position,self->position,-forward);        
+        }
+        if (keys[SDL_SCANCODE_D])
+        {
+            if(testPostion(self,right))
+                vector3d_add(self->position,self->position,right);
+        }
+        if (keys[SDL_SCANCODE_A])    
+        {
+            if(testPostion(self,vector3d(-right.x,-right.y,-right.z)))
+                vector3d_add(self->position,self->position,-right);
+        }
+        if(gfc_input_command_pressed("jump") && self->mana >= jumpCost && self->position.z == 0)
+        {
+            slog("position: x:%f y:%f z:%f",self->position.x,self->position.y,self->position.z);
+            self->mana = self->mana - jumpCost;
+            fall = SDL_GetTicks() + 1000;
+            self->gravForce =self->gravForce * -1;
+        }
+
+        if(gfc_input_command_pressed("shadow") && !self->invisible && self->mana >= invisCost)
+        {
+            self->mana = self->mana - invisCost;
+            shadeDuration = SDL_GetTicks() + 5000;
+            self->invisible = true;
+            self->color.g = 0;
+        }
     }
     if (keys[SDL_SCANCODE_SPACE])
     {
@@ -212,10 +240,10 @@ void player_think(Entity *self)
     }
     //if (keys[SDL_SCANCODE_Z])self->position.z -= 0.1;
     
-    if (keys[SDL_SCANCODE_UP])self->rotation.x -= 0.0050;
+    /*if (keys[SDL_SCANCODE_UP])self->rotation.x -= 0.0050;
     if (keys[SDL_SCANCODE_DOWN])self->rotation.x += 0.0050;
     if (keys[SDL_SCANCODE_RIGHT])self->rotation.z -= 0.0050;
-    if (keys[SDL_SCANCODE_LEFT])self->rotation.z += 0.0050;
+    if (keys[SDL_SCANCODE_LEFT])self->rotation.z += 0.0050;*/
     
     if (mouse.x != 0)self->rotation.z -= (mouse.x * 0.001);
     if (mouse.y != 0)self->rotation.x += (mouse.y * 0.001);
@@ -228,7 +256,7 @@ void player_think(Entity *self)
 
     if(gfc_input_command_pressed("highlight"))
     {
-        if(companion && !companion->hidden)
+        if(companion && !sacrificed)
         {
         //slog("1 is pressed!");
             if(SDL_GetTicks() > highlightCooldown)
@@ -243,20 +271,36 @@ void player_think(Entity *self)
         }
     }
 
-    if(gfc_input_command_pressed("jump") && self->mana >= jumpCost && self->position.z == 0)
+    if(gfc_input_command_pressed("use"))
     {
-        //slog("shadow colors: r:%f g:%f b:%f a:%f",self->color.r,self->color.g,self->color.b,self->color.a);
-        self->mana = self->mana - jumpCost;
-        fall = SDL_GetTicks() + 1000;
-        self->gravForce =self->gravForce * -1;
-    }
+        if(self->hiding && item)
+        {
+            self->position = item->exitPosition;
+            self->hiding = false;
+            self->hidden = 0;
+            if(companion && !sacrificed)
+            {
+                companion->hidden = 0;
+            }
+            item = NULL;
+        }
+        else
+        {
+            item = entity_find_item(self,itemRadius);
 
-    if(gfc_input_command_pressed("shadow") && !self->invisible && self->mana >= invisCost)
-    {
-        self->mana = self->mana - invisCost;
-        shadeDuration = SDL_GetTicks() + 5000;
-        self->invisible = true;
-        self->color.g = 0;
+            if(item)
+            {
+                if(item->vase)
+                {
+                    self->hiding = true;
+                    self->hidden = 1;
+                    if(companion)
+                    {
+                        companion->hidden = 1;
+                    }
+                }
+            }
+        }
     }
 
     entity_gravity(self);
@@ -313,12 +357,12 @@ Bool player_touch(Entity *player, Entity *inflictor, int type)
         return true;
     }
 
-    if(!companion->hidden)
+    if(!sacrificed)
     {
         //companion sacrifice
         sacrificeRevive = SDL_GetTicks() + sacrificeCooldown;
-        companion->hidden = !companion->hidden;
-        
+        companion->hidden = 1;
+        sacrificed = true;
 
         if(companion->hidden)
         {

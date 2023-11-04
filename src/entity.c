@@ -244,6 +244,7 @@ void entity_highlight(Entity *self, Entity *exclude, float radius)
     if(!self || !exclude)
     {
         slog("entity highlight messed up cuz of self or exclude problem");
+        return;
     }
 
     int i;
@@ -279,5 +280,49 @@ void entity_unhighlight()
 
         entity_manager.entity_list[i].selected = 0;
     }
+}
+
+Entity *entity_find_item(Entity* self, float radius)
+{
+    if(!self)
+    {
+        slog("item find did not work because of problem with self");
+        return NULL;
+    }
+    Entity* ent = NULL;
+    float entDist = radius;
+    float currentDist;
+    int i;
+    for(i = 0; i < entity_manager.entity_count; i++)
+    {
+        if(!entity_manager.entity_list[i]._inuse)
+        {
+            continue;
+        }
+
+        //skip if not ent type we lookin for
+        if(!entity_manager.entity_list[i].vase)
+        {
+            continue;
+        }
+
+        currentDist = vector3d_magnitude_between(self->position,entity_manager.entity_list[i].position);
+        if( currentDist <= radius)
+        {
+            //first case
+            if(ent == NULL)
+            {
+                ent = &entity_manager.entity_list[i];
+                entDist = currentDist;
+            }
+            else if (currentDist < entDist)
+            {
+                ent = &entity_manager.entity_list[i];
+                entDist = currentDist;
+            }
+        }
+    }
+
+    return ent;
 }
 /*eol@eof*/

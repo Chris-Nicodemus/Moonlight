@@ -82,7 +82,7 @@ void enemy_think(Entity *self)
         self->stunned = false;
     }
 
-    if(!self->stunned && !player->invisible)
+    if(!self->stunned && !player->invisible && !player->hiding)
     {
         if(self->aware)
         {
@@ -121,7 +121,7 @@ void enemy_think(Entity *self)
         }
     }
 
-    if((player->invisible || self->stunned) && self->aware)
+    if((player->invisible || self->stunned || player->hiding) && self->aware)
     {
         self->aware = false;
         self->velocity = vector3d(0,0,0);
