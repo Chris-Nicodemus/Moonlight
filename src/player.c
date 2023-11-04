@@ -26,6 +26,7 @@ Bool sacrificed = false;
 //item stuff
 float itemRadius = 50;
 Entity *item = NULL;
+
 //jump ability
 uint32_t fall = 0;
 int jumpCost = 10;
@@ -34,6 +35,13 @@ int jumpCost = 10;
 uint32_t shadeDuration = 0;
 uint32_t nextColorTick = 0;
 int invisCost = 30;
+
+//dash ability
+Bool dash = false;
+uint32_t dashCooldown = 0;
+uint32_t dashCDInterval = 500;
+int dashCost = 5;
+
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
@@ -144,6 +152,15 @@ void player_think(Entity *self)
     w = vector2d_from_angle(self->rotation.z - GFC_HALF_PI);
     right.x = w.x * 0.1;
     right.y = w.y * 0.1;
+    if(dash && (vector3d_magnitude(forward) > 0 || vector3d_magnitude(right) > 0) )
+    {
+        slog("forward, %f right, %f",vector3d_magnitude(forward),vector3d_magnitude(right));
+        dash = false;
+        forward.x = forward.x * 500;
+        forward.y = forward.y * 500;
+        right.x = right.x * 500;
+        right.y = right.y * 500;
+    }
 
     self->bounds = gfc_box(self->position.x,self->position.y,self->position.z,5,5,5);
 
@@ -228,6 +245,13 @@ void player_think(Entity *self)
             shadeDuration = SDL_GetTicks() + 5000;
             self->invisible = true;
             self->color.g = 0;
+        }
+
+        if(gfc_input_command_pressed("dash") && self->position.z == 0 && !dash && dashCooldown < SDL_GetTicks() && self->mana >= dashCost)
+        {
+            dash = true;
+            self->mana = self->mana - dashCost;
+            dashCooldown = SDL_GetTicks() + dashCDInterval;
         }
     }
     if (keys[SDL_SCANCODE_SPACE])
