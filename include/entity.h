@@ -59,6 +59,10 @@ typedef struct Entity_S
     uint32_t stunDuration; //how long till you're un-stunned
     int type;   //type of enemy you are. If not hostile, type is 0
 
+    //enemy specific
+    Bool aware;
+    Bool inRange;
+
     //player specific
     int manaMax;
     int mana;

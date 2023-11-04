@@ -5,8 +5,6 @@
 Entity *player = NULL;
 float chaseDistance = 50;
 float speed = 0.025;
-Bool aware = false;
-Bool inRange = false;
 uint32_t awareInterval = 3000;
 uint32_t awareThreshold = 0;
 
@@ -40,6 +38,7 @@ Entity *enemy_new(Vector3D pos, Entity *passedPlayer, int enemyType)
     ent->gravForce = -0.05;
     ent->player= false;
     ent->stunned = false;
+    ent->aware = false;
     ent->type = enemyType;
     vector3d_copy(ent->position,pos);
 
@@ -81,39 +80,48 @@ void enemy_think(Entity *self)
         self->stunned = false;
     }
 
-    if(!self-> stunned && aware)
+    if(!self->stunned && !player->invisible)
     {
-        Vector3D dir;
-        dir = vector3d(player->position.x - self->position.x, player->position.y - self->position.y,0);
-        vector3d_normalize(&dir);
-        self->velocity.x = dir.x * speed;
-        self->velocity.y = dir.y * speed;
-
-        if(gfc_box_overlap(self->bounds,player->bounds))
+        if(self->aware)
         {
-            player_touch(player,self,self->type);
+            Vector3D dir;
+            dir = vector3d(player->position.x - self->position.x, player->position.y - self->position.y,0);
+            vector3d_normalize(&dir);
+            self->velocity.x = dir.x * speed;
+            self->velocity.y = dir.y * speed;
+
+            if(gfc_box_overlap(self->bounds,player->bounds))
+            {
+                player_touch(player,self,self->type);
+            }
+        }
+
+        if(vector3d_magnitude_between(self->position,player->position) <= chaseDistance)
+        {
+            if(!self->inRange)
+            {
+                self->inRange = true;
+                awareThreshold = SDL_GetTicks() + awareInterval;
+                slog("In Range!");
+            }
+        }
+        else if(self->inRange || self->aware)
+        {
+            self->inRange = false;
+            self->aware = false;
+            self->velocity = vector3d(0,0,0);
+        }
+
+        if(self->inRange && !self->aware && SDL_GetTicks() > awareThreshold)
+        {
+            self->aware = true;
+            slog("Aware!");
         }
     }
 
-    if(!self->stunned && vector3d_magnitude_between(self->position,player->position) <= chaseDistance)
+    if(player->invisible && self->aware)
     {
-        if(!inRange)
-        {
-            inRange = true;
-            awareThreshold = SDL_GetTicks() + awareInterval;
-            slog("In Range!");
-        }
-    }
-    else if(inRange || aware)
-    {
-        inRange = false;
-        aware = false;
+        self->aware = false;
         self->velocity = vector3d(0,0,0);
-    }
-
-    if(inRange && !aware && SDL_GetTicks() > awareThreshold)
-    {
-        aware = true;
-        slog("Aware!");
     }
 }
