@@ -296,6 +296,8 @@ void player_think(Entity *self)
             starCooldown = SDL_GetTicks() + starCDInterval;
             starsOff = SDL_GetTicks() + starLife;
             self->starsOn = true;
+
+            entity_stars(self,starRadius,2000);
         }
     }
     if (keys[SDL_SCANCODE_SPACE])

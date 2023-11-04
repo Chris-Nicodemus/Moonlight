@@ -158,14 +158,6 @@ int main(int argc,char *argv[])
                 //gf2d_sprite_draw(mouse,vector2d(mousex,mousey),vector2d(2,2),vector3d(8,8,0),gfc_color(0.3,.9,1,0.9),(Uint32)mouseFrame);
         gf3d_vgraphics_render_end();
 
-        /*if(gfc_input_command_pressed("jump"))
-        {
-            int i;
-            for(i = 0; i < 100; i++)
-            {
-                particle[a].color = gfc_color8(0,0,0,0);
-            }
-        }*/
         if (gfc_input_command_down("exit"))done = 1; // exit condition
     }    
     

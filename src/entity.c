@@ -325,4 +325,57 @@ Entity *entity_find_item(Entity* self, float radius)
 
     return ent;
 }
+
+void entity_stars(Entity* self, float radius, uint32_t stunDuration)
+{
+    if(!self)
+    {
+        slog("entity stars failed cuz no player");
+    }
+
+    Entity *toKill[entity_manager.entity_count];
+    int toKillLength = 0;
+
+    int i;
+    for(i = 0; i < entity_manager.entity_count; i++)
+    {
+        if(!entity_manager.entity_list[i]._inuse)
+        {
+            continue;
+        }
+
+        //skip if too far
+        if(vector3d_magnitude_between(self->position,entity_manager.entity_list[i].position) > radius)
+        {
+            continue;
+        }
+
+        switch(entity_manager.entity_list[i].type)
+        {
+            case 0:
+                continue;
+                break;
+            case 1:
+                entity_manager.entity_list[i].stunDuration = SDL_GetTicks() + stunDuration;
+                entity_manager.entity_list[i].stunned = true;
+                break;
+            case 2:
+                toKill[toKillLength] = &entity_manager.entity_list[i];
+                toKillLength++;
+                break;
+            case 3:
+                entity_manager.entity_list[i].stunDuration = SDL_GetTicks() + stunDuration;
+                entity_manager.entity_list[i].stunned = true;
+                break;
+            default:
+                slog("U messed up the switch for entity stars, punk");
+        }
+    }
+
+    i = toKillLength - 1;
+    for( i = toKillLength - 1; i >= 0; i--)
+    {
+        entity_free(toKill[i]);
+    }
+}
 /*eol@eof*/

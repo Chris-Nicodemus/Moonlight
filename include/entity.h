@@ -173,4 +173,12 @@ void entity_unhighlight();
  * @return reference to closest usable item, NULL if none available
 */
 Entity *entity_find_item(Entity* self, float radius);
+
+/**
+ * @brief iterate through all ents to stun soldiers + commanders and kill fire sprites within range
+ * @param self entity in question
+ * @param radius range in question
+ * @param stunDuration duration of stun, duh
+*/
+void entity_stars(Entity* self, float radius, uint32_t stunDuration);
 #endif
