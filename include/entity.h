@@ -181,4 +181,11 @@ Entity *entity_find_item(Entity* self, float radius);
  * @param stunDuration duration of stun, duh
 */
 void entity_stars(Entity* self, float radius, uint32_t stunDuration);
+
+/**
+ * @brief iterate through all ents and kill any enemies within range
+ * @param self entity in question
+ * @param radius range in question
+*/
+void entity_shatter(Entity *self, float radius);
 #endif

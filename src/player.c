@@ -51,6 +51,11 @@ uint32_t starsOff = 0;
 uint32_t starCDInterval = 20000;
 uint32_t starLife = 2000;
 float starRadius = 200;
+
+//shatter ability
+float shatterRadius;
+float shatterMultiplier = 5;
+float shatterMaxCost = 50;
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
@@ -171,7 +176,7 @@ void player_think(Entity *self)
     right.y = w.y * 0.1;
     if(dash && (vector3d_magnitude(forward) > 0 || vector3d_magnitude(right) > 0) )
     {
-        slog("forward, %f right, %f",vector3d_magnitude(forward),vector3d_magnitude(right));
+        //slog("forward, %f right, %f",vector3d_magnitude(forward),vector3d_magnitude(right));
         dash = false;
         forward.x = forward.x * 500;
         forward.y = forward.y * 500;
@@ -259,7 +264,7 @@ void player_think(Entity *self)
         }
         if(gfc_input_command_pressed("jump") && self->mana >= jumpCost && self->position.z == 0)
         {
-            slog("position: x:%f y:%f z:%f",self->position.x,self->position.y,self->position.z);
+            //slog("position: x:%f y:%f z:%f",self->position.x,self->position.y,self->position.z);
             self->mana = self->mana - jumpCost;
             fall = SDL_GetTicks() + 1000;
             self->gravForce =self->gravForce * -1;
@@ -298,6 +303,22 @@ void player_think(Entity *self)
             self->starsOn = true;
 
             entity_stars(self,starRadius,2000);
+        }
+
+        if(gfc_input_command_pressed("shatter") && self->mana > 0)
+        {
+            if(self->mana >= shatterMaxCost)
+            {
+                shatterRadius = shatterMaxCost * shatterMultiplier;
+                self->mana = self->mana - shatterMaxCost;
+            }
+            else
+            {
+                shatterRadius = self->mana * shatterMultiplier;
+                self->mana = 0;
+            }
+
+            entity_shatter(self,shatterRadius);
         }
     }
     if (keys[SDL_SCANCODE_SPACE])
