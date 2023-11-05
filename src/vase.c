@@ -27,7 +27,7 @@ Entity *vase_new(Vector3D position)
     ent->vase = true;
 
     //ent->bounds = gfc_box(ent->position.x-0.2,ent->position.y-0.2,ent->position.z,2,1,2);
-    ent->roundBounds = gfc_sphere(ent->position.x,ent->position.y,ent->position.z, 6);
+    ent->roundBounds = gfc_sphere(ent->position.x,ent->position.y,ent->position.z, 4);
     ent->bounds = gfc_box(0,0,0,0,0,0);
     ent->scale = vector3d(0.2,0.2,0.2);
 
@@ -43,7 +43,7 @@ void vase_update(Entity *self)
     }
     vector3d_add(self->position,self->position,self->velocity);
     entity_gravity(self);
-    self->roundBounds = gfc_sphere(self->position.x,self->position.y,self->position.z,2);
+    self->roundBounds = gfc_sphere(self->position.x,self->position.y,self->position.z,4);
     //self->rotation.z += 0.01;
 }
 

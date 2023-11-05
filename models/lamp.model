@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/lamp/lamp.obj",
+        "texture":"models/lamp/Lamp_Post_low_Material.001_BaseColor.png"
+    }
+}

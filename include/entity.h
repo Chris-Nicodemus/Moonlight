@@ -55,6 +55,7 @@ typedef struct Entity_S
     //my stuff common
     float       gravForce; //force of gravity for entity
     Bool        player;    //true if entity is a player
+    struct Entity_S    *playerEnt; //reference to player
     Sphere      roundBounds; //if I wanna use a round hitbox
     Bool        stunned;   //if you are in the stunned state
     uint32_t    stunDuration; //how long till you're un-stunned
@@ -86,6 +87,8 @@ typedef struct Entity_S
     //item specific
     Vector3D    exitPosition; //where you show up when leave a vase
     Bool        vase; //proof that ent is a vase
+    Bool        lamp;
+    uint32_t    lampNextMana;
 
     //player specific
     int manaMax;

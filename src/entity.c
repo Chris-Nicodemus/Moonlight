@@ -237,6 +237,10 @@ Bool entity_checkSphere(Entity *self, Vector3D point)
 
         if(gfc_point_in_sphere(point, entity_manager.entity_list[i].roundBounds))
         {
+            if(self->player && entity_manager.entity_list[i].lamp)
+            {
+                continue;
+            }
             return true;
         }
     }

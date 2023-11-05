@@ -24,6 +24,7 @@
 #include "enemy.h"
 #include "companion.h"
 #include "vase.h"
+#include "lamp.h"
 
 extern int __DEBUG;
 
@@ -80,15 +81,15 @@ int main(int argc,char *argv[])
     player = player_new(vector3d(-50,0,0));
 
     Entity *companion = companion_new(vector3d(-40,0,10),player);
-    //player->scale = vector3d(5,5,5);
+
     player->companion = companion;
-    //enemy = enemy_new(vector3d(10,10,10),player,1);
-    //enemy->scale = vector3d(10,10,10);
+    enemy = enemy_new(vector3d(-200,-200,10),player,1);
+ 
 
     Entity *vase = vase_new(vector3d(-10,-10,0));
     vase->exitPosition = vector3d(-17.2,-18.6,0);
 
-
+    Entity *lamp = lamp_new(vector3d(10,10,0),player);
     /*int i;
     for(i = 0; i < 5; i++)
     {
@@ -96,7 +97,7 @@ int main(int argc,char *argv[])
     fireSprite->tracking = true;
     }*/
 
-    Entity *mage = enemy_new(vector3d(30,30,30),player, 3);
+    Entity *mage = enemy_new(vector3d(1000,1000,30),player, 3);
      /*for (a = 0; a < 100; a++)
     {
         particle[a].position = vector3d(gfc_crandom() * 10,gfc_crandom() * 10,gfc_crandom() * 10);
