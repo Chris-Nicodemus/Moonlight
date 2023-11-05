@@ -38,7 +38,7 @@ int main(int argc,char *argv[])
     float mouseFrame = 0;
     //World *w;
     Entity *enemy;
-    Particle particle[100];
+    //Particle particle[100];
     Matrix4 skyMat;
     Model *sky;
     extern Particle stars[300];
@@ -89,6 +89,13 @@ int main(int argc,char *argv[])
     Entity *vase = vase_new(vector3d(-10,-10,0));
     vase->exitPosition = vector3d(-17.2,-18.6,0);
 
+
+    int i;
+    for(i = 0; i < 5; i++)
+    {
+    Entity *fireSprite = enemy_new(vector3d(30,30,10),player,2);
+    fireSprite->tracking = true;
+    }
      /*for (a = 0; a < 100; a++)
     {
         particle[a].position = vector3d(gfc_crandom() * 10,gfc_crandom() * 10,gfc_crandom() * 10);

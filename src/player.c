@@ -22,6 +22,8 @@ Bool highlighted = false;
 //companion sacrifice ability
 uint32_t sacrificeCooldown = 500000;
 uint32_t sacrificeRevive = 0;
+int sacrificeCap = 3;
+int currentSacrifice = 0;
 Bool sacrificed = false;
 
 //item stuff
@@ -86,6 +88,9 @@ Entity *player_new(Vector3D position)
     ent->hiding = false;
     ent->invisible = false;
     ent->starsOn = false;
+    ent->speed = 0.1;
+    ent->slowedSpeed = 0.025;
+    ent->slowed = false;
     ent->shadow = gfc_color8(114,0,182,179);
     ent->scale = vector3d(7.5,7.5,7.5);
 
@@ -156,6 +161,7 @@ void transitionToWhite(Entity *self)
     if(self->color.a < 255)
         self->color.a = self->color.a + 1;
 }
+
 void player_think(Entity *self)
 {
     Vector3D forward = {0};
@@ -169,11 +175,27 @@ void player_think(Entity *self)
     mouse.x = mx;
     mouse.y = my;
     w = vector2d_from_angle(self->rotation.z);
-    forward.x = w.x * 0.1;
-    forward.y = w.y * 0.1;
+    if(!self->slowed)
+    {
+        forward.x = w.x * self->speed;
+        forward.y = w.y * self->speed;
+    }
+    else
+    {
+        forward.x = w.x * self->slowedSpeed;
+        forward.y = w.y * self->slowedSpeed;
+    }
     w = vector2d_from_angle(self->rotation.z - GFC_HALF_PI);
-    right.x = w.x * 0.1;
-    right.y = w.y * 0.1;
+    if(!self->slowed)
+    {
+        right.x = w.x * self->speed;
+        right.y = w.y * self->speed;
+    }
+    else
+    {
+        right.x = w.x * self->slowedSpeed;
+        right.y = w.y * self->slowedSpeed;
+    }
     if(dash && (vector3d_magnitude(forward) > 0 || vector3d_magnitude(right) > 0) )
     {
         //slog("forward, %f right, %f",vector3d_magnitude(forward),vector3d_magnitude(right));
@@ -221,6 +243,11 @@ void player_think(Entity *self)
     if(gfc_color_cmp(self->color,gfc_color8(255,255,255,255)) == 0 && !self->invisible)
     {
         transitionToWhite(self);
+    }
+
+    if(self->slowed && SDL_GetTicks() > self->slowDuration)
+    {
+        self->slowed = false;
     }
 
     if(highlighted && SDL_GetTicks() > highlightDuration)
@@ -442,40 +469,79 @@ Bool player_touch(Entity *player, Entity *inflictor, int type)
         slog("player touch failed because missing pointer");
     }
 
-    if(!companion)
+    switch (type)
     {
-        slog("You die!");
-        return true;
-    }
+        case 1:
+            if(!companion)
+            {
+                slog("You die!");
+                return true;
+            }
 
-    if(!sacrificed)
-    {
-        //companion sacrifice
-        sacrificeRevive = SDL_GetTicks() + sacrificeCooldown;
-        companion->hidden = 1;
-        sacrificed = true;
+            if(!sacrificed)
+            {
+                //companion sacrifice
+                sacrificeRevive = SDL_GetTicks() + sacrificeCooldown;
+                companion->hidden = 1;
+                sacrificed = true;
 
-        if(companion->hidden)
-        {
-            slog("successfully hidden");
-        }
-        else
-        {
-            slog("failure");
-        }
-        //send enemy backwards and stun
-        Vector3D backwards;
-        vector3d_add(backwards,inflictor->velocity,inflictor->velocity);
-        vector3d_sub(inflictor->position, inflictor->position, backwards);
-        inflictor->stunDuration = SDL_GetTicks() + 2000;
-        inflictor->stunned = true;
+                if(companion->hidden)
+                {
+                    slog("successfully hidden");
+                }
+                else
+                {
+                    slog("failure");
+                }
+                //send enemy backwards and stun
+                Vector3D backwards;
+                vector3d_add(backwards,inflictor->velocity,inflictor->velocity);
+                vector3d_sub(inflictor->position, inflictor->position, backwards);
+                inflictor->stunDuration = SDL_GetTicks() + 2000;
+                inflictor->stunned = true;
         
+                slog("companion save!");
+                return false;
+            }
+            return true;
+            break;
+        case 2:
+            if(!companion)
+            {
+                slog("slowed!");
+                return true;
+            }
 
+            if(!sacrificed)
+            {
+                currentSacrifice++;
+                if(currentSacrifice == sacrificeCap)
+                {
+                    //companion sacrifice
+                    sacrificeRevive = SDL_GetTicks() + sacrificeCooldown;
+                    companion->hidden = 1;
+                    sacrificed = true;
+                    currentSacrifice = 0;
 
-        slog("companion save!");
-        return false;
+                    if(companion->hidden)
+                    {
+                        slog("successfully hidden");
+                    }
+                    else
+                    {
+                        slog("failure");
+                    }
+                }
+
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+            break;
     }
-
-    return true;
+    
+    return false;
 }
 /*eol@eof*/

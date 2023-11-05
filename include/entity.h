@@ -58,6 +58,10 @@ typedef struct Entity_S
     Bool        stunned;   //if you are in the stunned state
     uint32_t    stunDuration; //how long till you're un-stunned
     int         type;   //type of enemy you are. If not hostile, type is 0
+    float       slowedSpeed;
+    float       speed;
+    Bool        slowed;
+    uint32_t    slowDuration;
 
     //enemy specific
     Bool        aware;
@@ -65,7 +69,7 @@ typedef struct Entity_S
     uint32_t    awareInterval;
     uint32_t    awareThreshold;
     float       chaseDistance;
-    float       speed;
+    Bool        tracking;
 
     //item specific
     Vector3D    exitPosition; //where you show up when leave a vase

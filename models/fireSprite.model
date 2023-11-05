@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/fireBall/fireball.obj",
+        "texture":"models/fireBall/Default Material_Paint Layer 1.png"
+    }
+}
