@@ -2,6 +2,6 @@
     "model":
     {
         "model":"models/Fire Mage/pyroClastia.obj",
-        "texture":"models/Fire Mage/OC October - 12 Pyro ClastiaTex3.png"
+        "texture":"models/Fire Mage/textures/OC October - 12 Pyro ClastiaTex3.png"
     }
 }

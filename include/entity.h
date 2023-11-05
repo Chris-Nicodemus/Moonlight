@@ -6,6 +6,7 @@
 #include "gfc_primitives.h"
 
 #include "gf3d_model.h"
+#include "gf3d_particle.h"
 
 typedef enum
 {
@@ -69,8 +70,19 @@ typedef struct Entity_S
     uint32_t    awareInterval;
     uint32_t    awareThreshold;
     float       chaseDistance;
+    
+    //srite only
+    uint32_t    spriteLife;
     Bool        tracking;
-
+    struct Entity_S *owner; //ref to the mage that created the flame sprite
+    //Particle    flameTrail[50];
+    
+    //mage only
+    struct Entity_S *flames[6]; //array of flame sprites that the mage can have
+    int         flameNum;
+    Bool        pinged;
+    Vector3D    pingPos;
+    uint32_t    flameCD; //cooldown for more tracking flame sprites
     //item specific
     Vector3D    exitPosition; //where you show up when leave a vase
     Bool        vase; //proof that ent is a vase
@@ -82,6 +94,7 @@ typedef struct Entity_S
     Bool invisible;
     Color shadow;
     Bool starsOn;
+    struct Entity_S *companion;
 }Entity;
 
 typedef struct EntityManager_S

@@ -70,6 +70,10 @@ void entity_free(Entity *self)
 {
     if (!self)return;
     //MUST DESTROY
+    if(self->type == 2 && self->owner)
+    {
+        self->owner->flameNum = self->owner->flameNum - 1;
+    }
     gf3d_model_free(self->model);
     memset(self,0,sizeof(Entity));
 }

@@ -81,21 +81,22 @@ int main(int argc,char *argv[])
 
     Entity *companion = companion_new(vector3d(-40,0,10),player);
     //player->scale = vector3d(5,5,5);
-    if(player_getCompanion(player,companion))
-    slog("companion recieved");
-    enemy = enemy_new(vector3d(10,10,10),player,1);
+    player->companion = companion;
+    //enemy = enemy_new(vector3d(10,10,10),player,1);
     //enemy->scale = vector3d(10,10,10);
 
     Entity *vase = vase_new(vector3d(-10,-10,0));
     vase->exitPosition = vector3d(-17.2,-18.6,0);
 
 
-    int i;
+    /*int i;
     for(i = 0; i < 5; i++)
     {
-    Entity *fireSprite = enemy_new(vector3d(30,30,10),player,2);
+    Entity *fireSprite = enemy_new(vector3d(30 + i,30 + i,10 + i),player,2);
     fireSprite->tracking = true;
-    }
+    }*/
+
+    Entity *mage = enemy_new(vector3d(30,30,30),player, 3);
      /*for (a = 0; a < 100; a++)
     {
         particle[a].position = vector3d(gfc_crandom() * 10,gfc_crandom() * 10,gfc_crandom() * 10);

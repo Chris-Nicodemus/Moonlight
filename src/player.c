@@ -10,7 +10,7 @@ static int thirdPersonMode = 1;
 void player_think(Entity *self);
 void player_update(Entity *self);
 
-Entity *companion = NULL;
+//Entity *companion = NULL;
 //companion highlight ability
 uint32_t highlightInterval = 20000;
 uint32_t highlightCooldown = 0;
@@ -261,7 +261,7 @@ void player_think(Entity *self)
         slog("triggering");
         if(!self->hiding)
         {
-            companion->hidden = 0;
+            self->companion->hidden = 0;
         }
         sacrificed = false;
     }
@@ -374,7 +374,7 @@ void player_think(Entity *self)
 
     if(gfc_input_command_pressed("highlight"))
     {
-        if(companion && !sacrificed)
+        if(self->companion && !sacrificed)
         {
         //slog("1 is pressed!");
             if(SDL_GetTicks() > highlightCooldown)
@@ -384,7 +384,7 @@ void player_think(Entity *self)
 
                 highlightDuration = SDL_GetTicks() + highlightDurationInterval;
 
-                entity_highlight(self, companion, highlightRadius);
+                entity_highlight(self, self->companion, highlightRadius);
             }
         }
     }
@@ -396,9 +396,9 @@ void player_think(Entity *self)
             self->position = item->exitPosition;
             self->hiding = false;
             self->hidden = 0;
-            if(companion && !sacrificed)
+            if(self->companion && !sacrificed)
             {
-                companion->hidden = 0;
+                self->companion->hidden = 0;
             }
             item = NULL;
         }
@@ -412,9 +412,9 @@ void player_think(Entity *self)
                 {
                     self->hiding = true;
                     self->hidden = 1;
-                    if(companion)
+                    if(self->companion)
                     {
-                        companion->hidden = 1;
+                        self->companion->hidden = 1;
                     }
                 }
             }
@@ -454,9 +454,10 @@ void player_update(Entity *self)
 
 Bool player_getCompanion(Entity *player, Entity *passedCompanion)
 {
-    companion = passedCompanion;
-    if(companion)
+    player->companion = passedCompanion;
+    if(player->companion)
     {
+        
         return true;
     }
     return false;
@@ -472,7 +473,7 @@ Bool player_touch(Entity *player, Entity *inflictor, int type)
     switch (type)
     {
         case 1:
-            if(!companion)
+            if(!player->companion)
             {
                 slog("You die!");
                 return true;
@@ -482,10 +483,11 @@ Bool player_touch(Entity *player, Entity *inflictor, int type)
             {
                 //companion sacrifice
                 sacrificeRevive = SDL_GetTicks() + sacrificeCooldown;
-                companion->hidden = 1;
+                player->companion->hidden = 1;
                 sacrificed = true;
+                currentSacrifice = 0;
 
-                if(companion->hidden)
+                if(player->companion->hidden)
                 {
                     slog("successfully hidden");
                 }
@@ -506,7 +508,7 @@ Bool player_touch(Entity *player, Entity *inflictor, int type)
             return true;
             break;
         case 2:
-            if(!companion)
+            if(!player->companion)
             {
                 slog("slowed!");
                 return true;
@@ -519,11 +521,11 @@ Bool player_touch(Entity *player, Entity *inflictor, int type)
                 {
                     //companion sacrifice
                     sacrificeRevive = SDL_GetTicks() + sacrificeCooldown;
-                    companion->hidden = 1;
+                    player->companion->hidden = 1;
                     sacrificed = true;
                     currentSacrifice = 0;
 
-                    if(companion->hidden)
+                    if(player->companion->hidden)
                     {
                         slog("successfully hidden");
                     }
@@ -539,6 +541,42 @@ Bool player_touch(Entity *player, Entity *inflictor, int type)
             {
                 return true;
             }
+            break;
+        case 3:
+            if(!player->companion)
+            {
+                slog("You die!");
+                return true;
+            }
+
+            if(!sacrificed)
+            {
+                //companion sacrifice
+                sacrificeRevive = SDL_GetTicks() + sacrificeCooldown;
+                player->companion->hidden = 1;
+                sacrificed = true;
+                currentSacrifice = 0;
+
+                if(player->companion->hidden)
+                {
+                    slog("successfully hidden");
+                }
+                else
+                {
+                    slog("failure");
+                }
+                //send enemy backwards and stun
+                //Vector3D backwards;
+                //vector3d_add(backwards,inflictor->velocity,inflictor->velocity);
+                //vector3d_sub(inflictor->position, inflictor->position, backwards);
+                inflictor->velocity = vector3d(0,0,0);
+                inflictor->stunDuration = SDL_GetTicks() + 2000;
+                inflictor->stunned = true;
+        
+                slog("companion save!");
+                return false;
+            }
+            return true;
             break;
     }
     
