@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/fireworks/fireworks.obj",
+        "texture":"models/kindred/textures/TX_Mask.jpeg"
+    }
+}

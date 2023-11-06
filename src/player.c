@@ -29,6 +29,7 @@ Bool sacrificed = false;
 //item stuff
 float itemRadius = 50;
 Entity *item = NULL;
+uint32_t fireworkFuse = 1500;
 
 //jump ability
 uint32_t fall = 0;
@@ -416,6 +417,11 @@ void player_think(Entity *self)
                     {
                         self->companion->hidden = 1;
                     }
+                }
+                if(item->firework && !item->used)
+                {
+                    item->fireworkExplosion = SDL_GetTicks() + fireworkFuse;
+                    item->used = true;
                 }
             }
         }

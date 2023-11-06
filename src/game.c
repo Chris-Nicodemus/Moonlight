@@ -25,6 +25,7 @@
 #include "companion.h"
 #include "vase.h"
 #include "lamp.h"
+#include "firework.h"
 
 extern int __DEBUG;
 
@@ -106,10 +107,7 @@ int main(int argc,char *argv[])
         particle[a].size = 100 * gfc_random();
     }*/
 
-    /*for(a = 0; a < 300; a++)
-    {
-        slog("%f",stars[a].position.x);
-    }*/
+    Entity *firework = firework_new(vector3d(-100,-100,10));
     a = 0;
     sky = gf3d_model_load("models/sky.model");
     gfc_matrix_identity(skyMat);

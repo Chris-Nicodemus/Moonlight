@@ -76,7 +76,6 @@ typedef struct Entity_S
     uint32_t    spriteLife;
     Bool        tracking;
     struct Entity_S *owner; //ref to the mage that created the flame sprite
-    //Particle    flameTrail[50];
     
     //mage only
     struct Entity_S *flames[6]; //array of flame sprites that the mage can have
@@ -89,6 +88,9 @@ typedef struct Entity_S
     Bool        vase; //proof that ent is a vase
     Bool        lamp;
     uint32_t    lampNextMana;
+    Bool        firework;
+    uint32_t    fireworkExplosion;
+    Bool        used;
 
     //player specific
     int manaMax;

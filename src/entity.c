@@ -309,7 +309,12 @@ Entity *entity_find_item(Entity* self, float radius)
         }
 
         //skip if not ent type we lookin for
-        if(!entity_manager.entity_list[i].vase)
+        if(!entity_manager.entity_list[i].vase && !entity_manager.entity_list[i].firework)
+        {
+            continue;
+        }
+
+        if(entity_manager.entity_list[i].used)
         {
             continue;
         }
@@ -366,6 +371,7 @@ void entity_stars(Entity* self, float radius, uint32_t stunDuration)
             case 1:
                 entity_manager.entity_list[i].stunDuration = SDL_GetTicks() + stunDuration;
                 entity_manager.entity_list[i].stunned = true;
+                slog("stunned a normie");
                 break;
             case 2:
                 toKill[toKillLength] = &entity_manager.entity_list[i];
