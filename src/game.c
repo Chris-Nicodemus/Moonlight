@@ -39,14 +39,14 @@ int main(int argc,char *argv[])
     //Uint32 then;
     float mouseFrame = 0;
     //World *w;
-    Entity *enemy;
+    //Entity *enemy;
     //Particle particle[100];
     Matrix4 skyMat;
     Model *sky;
     extern Particle stars[300];
     World *forest;
 
-    Entity*player;
+    Entity *player;
     float manaRatio = 0.0;
     //uint32_t nextManaLoss = 0;
 
@@ -75,22 +75,22 @@ int main(int argc,char *argv[])
     //w = world_load("config/testworld.json");
     
     forest = world_load("config/forest.json");
-
+    player = forest->player;
     SDL_SetRelativeMouseMode(SDL_TRUE);
     slog_sync();
     gf3d_camera_set_scale(vector3d(1,1,1));
-    player = player_new(vector3d(-50,0,0));
+    //player = player_new(vector3d(-50,0,0));
 
-    Entity *companion = companion_new(vector3d(-40,0,10),player);
+    //Entity *companion = companion_new(vector3d(-40,0,10),player);
+    //player->companion = companion;
 
-    player->companion = companion;
-    enemy = enemy_new(vector3d(-200,-200,10),player,1);
+    //enemy = enemy_new(vector3d(-200,-200,10),player,1);
  
 
-    Entity *vase = vase_new(vector3d(-10,-10,0));
-    vase->exitPosition = vector3d(-17.2,-18.6,0);
+    //Entity *vase = vase_new(vector3d(-10,-10,0));
+    //vase->exitPosition = vector3d(-17.2,-18.6,0);
 
-    Entity *lamp = lamp_new(vector3d(10,10,0),player);
+    //Entity *lamp = lamp_new(vector3d(10,10,0),player);
     /*int i;
     for(i = 0; i < 5; i++)
     {
@@ -98,7 +98,7 @@ int main(int argc,char *argv[])
     fireSprite->tracking = true;
     }*/
 
-    Entity *mage = enemy_new(vector3d(1000,1000,30),player, 3);
+    //Entity *mage = enemy_new(vector3d(1000,1000,30),player, 3);
      /*for (a = 0; a < 100; a++)
     {
         particle[a].position = vector3d(gfc_crandom() * 10,gfc_crandom() * 10,gfc_crandom() * 10);
@@ -107,7 +107,7 @@ int main(int argc,char *argv[])
         particle[a].size = 100 * gfc_random();
     }*/
 
-    Entity *firework = firework_new(vector3d(-100,-100,10));
+    //Entity *firework = firework_new(vector3d(-100,-100,10));
     a = 0;
     sky = gf3d_model_load("models/sky.model");
     gfc_matrix_identity(skyMat);
