@@ -1,4 +1,5 @@
 #include <SDL.h>            
+#include <SDL_mixer.h>
 
 #include "simple_logger.h"
 #include "gfc_input.h"
@@ -16,6 +17,7 @@
 #include "gf2d_sprite.h"
 #include "gf2d_font.h"
 #include "gf2d_draw.h"
+#include "gfc_audio.h"
 
 #include "entity.h"
 #include "agumon.h"
@@ -26,6 +28,7 @@
 #include "vase.h"
 #include "lamp.h"
 #include "firework.h"
+
 
 extern int __DEBUG;
 
@@ -68,14 +71,17 @@ int main(int argc,char *argv[])
     slog_sync();
     
     entity_system_init(1024);
-    
+    gfc_audio_init(100,32,4,10,1,0);
+    Mix_Music *awaken = gfc_sound_load_music("audio/awaken-136824.wav");
+    Mix_PlayMusic(awaken, -1);
+
     //mouse = gf2d_sprite_load("images/pointer.png",32,32, 16);
     
 //     if (agu)agu->selected = 1;
     //w = world_load("config/testworld.json");
     
     forest = world_load("config/forest.json");
-    player = forest->player;
+    player = gfc_list_get_nth(forest->entityList,0);
     SDL_SetRelativeMouseMode(SDL_TRUE);
     slog_sync();
     gf3d_camera_set_scale(vector3d(1,1,1));

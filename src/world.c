@@ -32,13 +32,18 @@ Entity *makeEnt(World *self, SJson *spawn)
     {
         sj_value_as_vector3d(sj_object_get_value(spawn,"position"),&pos);
         ent = player_new(pos);
-        self->player = ent;
+        gfc_list_append(self->entityList,ent);
         return ent;
     }
     else if(strcmp(name,"companion") == 0)
     {
+        Entity *player = gfc_list_get_nth(self->entityList, 0);
+
         sj_value_as_vector3d(sj_object_get_value(spawn,"position"),&pos);
-        ent = companion_new(pos,self->player);
+        ent = companion_new(pos,player);
+        player->companion = ent;
+        gfc_list_append(self->entityList,ent);
+        
         return ent;
     }
     else if(strcmp(name,"enemy") == 0)
@@ -46,7 +51,8 @@ Entity *makeEnt(World *self, SJson *spawn)
         int type;
         sj_get_integer_value(sj_object_get_value(spawn,"type"),&type);
         sj_value_as_vector3d(sj_object_get_value(spawn,"position"),&pos);
-        ent = enemy_new(pos,self->player,type);
+        ent = enemy_new(pos,gfc_list_get_nth(self->entityList,0),type);
+        gfc_list_append(self->entityList,ent);
         return ent;
     }
     else if(strcmp(name,"vase") == 0)
@@ -56,18 +62,21 @@ Entity *makeEnt(World *self, SJson *spawn)
         sj_value_as_vector3d(sj_object_get_value(spawn,"exit"),&exit);
         ent = vase_new(pos);
         ent->exitPosition=exit;
+        gfc_list_append(self->entityList,ent);
         return ent;
     }
     else if(strcmp(name,"lamp") == 0)
     {
         sj_value_as_vector3d(sj_object_get_value(spawn,"position"),&pos);
-        ent = lamp_new(pos,self->player);
+        ent = lamp_new(pos,gfc_list_get_nth(self->entityList,0));
+        gfc_list_append(self->entityList,ent);
         return ent;
     }
     else if(strcmp(name,"firework") == 0)
     {
         sj_value_as_vector3d(sj_object_get_value(spawn,"position"),&pos);
         ent = firework_new(pos);
+        gfc_list_append(self->entityList,ent);
         return ent;
     }
 
@@ -114,16 +123,12 @@ World *world_load(char *filename)
         slog("didn't work");
     }
     int count,i;
+    w->entityList = gfc_list_new();
     count = sj_array_get_count(spawns);
     slog("%i",count);
     for(i = 0; i < count; i++)
     {
         makeEnt(w, sj_array_get_nth(spawns,i));
-    }
-    
-    if(w->player)
-    {
-        slog("You got a player fool");
     }
 
     sj_value_as_vector3d(sj_object_get_value(wjson,"scale"),&w->scale);

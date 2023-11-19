@@ -6,7 +6,7 @@ Entity *player = NULL;
 float chaseDistance1 = 150;
 uint32_t awareInterval1 = 2000;
 float speed1 = 0.025;
-float speed2 = 0.04;
+float speed2 = 0.08;
 uint32_t slowDuration = 4500;
 uint32_t spriteLifeInterval = 3500; //amount of time it take for sprite to die out
 
@@ -228,6 +228,11 @@ void sprite_think(Entity *self)
 void mage_think(Entity *self)
 {
     if (!self)return; 
+
+    if(self->stunned)
+    {
+        self->velocity = vector3d(0,0,0);
+    }
     if(self->stunned && SDL_GetTicks() > self->stunDuration)
     {
         self->stunned = false;

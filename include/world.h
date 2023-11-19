@@ -22,7 +22,6 @@ typedef struct
     Color color;
     List *spawnList;        //entities to spawn
     List *entityList;       //entities that exist in the world
-    Entity *player;
 }World;
 
 World *world_load(char *filename);
