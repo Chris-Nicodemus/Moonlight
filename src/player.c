@@ -59,6 +59,10 @@ float starRadius = 200;
 float shatterRadius;
 float shatterMultiplier = 5;
 float shatterMaxCost = 50;
+
+Bool walking = false;
+Sound *walkSound;
+
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
@@ -69,6 +73,17 @@ Entity *player_new(Vector3D position)
         slog("UGH OHHHH, no player for you!");
         return NULL;
     }
+
+    if(!walkSound)
+    {
+       walkSound = gfc_sound_load("audio/613260__thy-sfx__grass-running.wav",128,0);
+       if(walkSound)
+       {
+           gfc_sound_play(walkSound,-1,128,0,0);
+           slog("playing");
+       }
+    }
+
 
     ent->model = gf3d_model_load("models/child.model");
     ent->think = player_think;
@@ -267,29 +282,53 @@ void player_think(Entity *self)
         sacrificed = false;
     }
 
+    walking = false;
 
     if(!self->hiding && !self->stunned)
     {
+        
         if (keys[SDL_SCANCODE_W])
         {   
             if(testPostion(self,forward))
+            {
                 vector3d_add(self->position,self->position,forward);
+                walking = true;
+            }
         }
         if (keys[SDL_SCANCODE_S])
         {
             if(testPostion(self,vector3d(-forward.x,-forward.y,-forward.z)))
+            {
                 vector3d_add(self->position,self->position,-forward);        
+                walking = true;
+            }
         }
         if (keys[SDL_SCANCODE_D])
         {
             if(testPostion(self,right))
+            {
                 vector3d_add(self->position,self->position,right);
+                walking = true;
+            }
         }
         if (keys[SDL_SCANCODE_A])    
         {
             if(testPostion(self,vector3d(-right.x,-right.y,-right.z)))
+            {
                 vector3d_add(self->position,self->position,-right);
+                walking = true;
+            }
         }
+
+        if(!walking)
+        {
+            Mix_Volume(0,0);
+        }
+        else
+        {
+            Mix_Volume(0,128);
+        }
+        
         if(gfc_input_command_pressed("jump") && self->mana >= jumpCost && self->position.z == 0)
         {
             //slog("position: x:%f y:%f z:%f",self->position.x,self->position.y,self->position.z);
@@ -417,6 +456,7 @@ void player_think(Entity *self)
                     {
                         self->companion->hidden = 1;
                     }
+                    self->position = item->position;
                 }
                 if(item->firework && !item->used)
                 {

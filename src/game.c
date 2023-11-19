@@ -74,7 +74,8 @@ int main(int argc,char *argv[])
     gfc_audio_init(100,32,4,10,1,0);
     Mix_Music *awaken = gfc_sound_load_music("audio/awaken-136824.wav");
     Mix_PlayMusic(awaken, -1);
-
+    Mix_VolumeMusic(64);
+    slog("music volume: %i",Mix_VolumeMusic(-1));
     //mouse = gf2d_sprite_load("images/pointer.png",32,32, 16);
     
 //     if (agu)agu->selected = 1;

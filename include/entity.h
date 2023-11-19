@@ -8,6 +8,8 @@
 #include "gf3d_model.h"
 #include "gf3d_particle.h"
 
+#include "gfc_audio.h"
+
 typedef enum
 {
     ES_idle = 0,
