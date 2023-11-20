@@ -60,8 +60,15 @@ float shatterRadius;
 float shatterMultiplier = 5;
 float shatterMaxCost = 50;
 
+//sounds
 Bool walking = false;
 Sound *walkSound;
+Sound *invisIn;
+Sound *invisOut;
+Sound *dashSound;
+Sound *starSound;
+Sound *jump;
+Sound *glass;
 
 Entity *player_new(Vector3D position)
 {
@@ -76,14 +83,38 @@ Entity *player_new(Vector3D position)
 
     if(!walkSound)
     {
-       walkSound = gfc_sound_load("audio/613260__thy-sfx__grass-running.wav",128,0);
+       walkSound = gfc_sound_load("audio/613260__thy-sfx__grass-running.wav",1,0);
        if(walkSound)
        {
-           gfc_sound_play(walkSound,-1,128,0,0);
-           slog("playing");
+           gfc_sound_play(walkSound,-1,0,0,0);
+           //slog("playing");
        }
     }
 
+    if(!invisIn)
+    {
+        invisIn = gfc_sound_load("audio/234799__richerlandtv__magic-pass-by.wav",1,1);
+    }
+
+    if(!invisOut)
+    {
+        invisOut = gfc_sound_load("audio/168180__speedenza__whoosh-woow-mk3.wav",1,1);
+    }
+
+    if(!dashSound)
+    {
+        dashSound = gfc_sound_load("audio/dash.wav",1,2);
+    }
+
+    if(!jump)
+    {
+        jump = gfc_sound_load("audio/zapsplat_magic_impact_hard_002_32007.wav",1,4);
+    }
+
+    if(!glass)
+    {
+        glass = gfc_sound_load("audio/zapsplat_impacts_short_whoosh_into_heavy_glass_and_material_smash_62177.wav",1,4);
+    }
 
     ent->model = gf3d_model_load("models/child.model");
     ent->think = player_think;
@@ -247,6 +278,7 @@ void player_think(Entity *self)
         if(shadeDuration < SDL_GetTicks())
         {
             self->invisible = false;
+            gfc_sound_play(invisOut,0,1,1,0);
             //self->color = gfc_color8(255,255,255,255);
         }
 
@@ -328,10 +360,11 @@ void player_think(Entity *self)
         {
             Mix_Volume(0,128);
         }
-        
+
         if(gfc_input_command_pressed("jump") && self->mana >= jumpCost && self->position.z == 0)
         {
             //slog("position: x:%f y:%f z:%f",self->position.x,self->position.y,self->position.z);
+            gfc_sound_play(jump,0,1,3,0);
             self->mana = self->mana - jumpCost;
             fall = SDL_GetTicks() + 1000;
             self->gravForce =self->gravForce * -1;
@@ -339,6 +372,7 @@ void player_think(Entity *self)
 
         if(gfc_input_command_pressed("shadow") && !self->invisible && self->mana >= invisCost)
         {
+            gfc_sound_play(invisIn,0,0.2,1,0);
             self->mana = self->mana - invisCost;
             shadeDuration = SDL_GetTicks() + 5000;
             self->invisible = true;
@@ -347,6 +381,7 @@ void player_think(Entity *self)
 
         if(gfc_input_command_pressed("dash") && self->position.z == 0 && !dash && dashCooldown < SDL_GetTicks() && self->mana >= dashCost)
         {
+            gfc_sound_play(dashSound,0,0.75,2,0);
             dash = true;
             self->mana = self->mana - dashCost;
             dashCooldown = SDL_GetTicks() + dashCDInterval;
@@ -374,6 +409,7 @@ void player_think(Entity *self)
 
         if(gfc_input_command_pressed("shatter") && self->mana > 0)
         {
+            gfc_sound_play(glass,0,1,4,0);
             if(self->mana >= shatterMaxCost)
             {
                 shatterRadius = shatterMaxCost * shatterMultiplier;
