@@ -116,6 +116,11 @@ Entity *player_new(Vector3D position)
         glass = gfc_sound_load("audio/zapsplat_impacts_short_whoosh_into_heavy_glass_and_material_smash_62177.wav",1,4);
     }
 
+    if(!starSound)
+    {
+        starSound = gfc_sound_load("audio/zapsplat_sound_design_twinkle_mysterious_metallic_chime_003_48023.wav",1,5);
+    }
+
     ent->model = gf3d_model_load("models/child.model");
     ent->think = player_think;
     ent->update = player_update;
@@ -389,6 +394,7 @@ void player_think(Entity *self)
 
         if(gfc_input_command_pressed("star") && starCooldown < SDL_GetTicks() && self->mana >= starCost)
         {
+            gfc_sound_play(starSound,0,1,5,0);
             self->mana = self->mana - starCost;
             int i;
             for(i = 0; i < 300; i++)

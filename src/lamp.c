@@ -1,11 +1,18 @@
 #include "simple_logger.h"
 #include "lamp.h"
 
-uint32_t lampInterval = 100;
-
 void lamp_update(Entity *self);
 
 void lamp_think(Entity *self);
+
+uint32_t lampInterval = 100;
+uint32_t musicDownInterval = 50;
+uint32_t musicDown = 0;
+
+Bool playerIn = false;
+Sound *lampCharging;
+
+Mix_Music *music;
 
 Entity *lamp_new(Vector3D position, Entity *player)
 {
@@ -17,6 +24,12 @@ Entity *lamp_new(Vector3D position, Entity *player)
         slog("UGH OHHHH, no lamp for you!");
         return NULL;
     }
+
+    if(!lampCharging)
+    {
+        lampCharging = gfc_sound_load("audio/wind-chimes-with-wind-and-light-rain-171624.wav",1,6);
+    }
+
     ent->selectedColor = gfc_color(0.1,1,0.1,1.0);
     ent->color = gfc_color(1,1,1,1);
     ent->model = gf3d_model_load("models/lamp.model");
@@ -50,10 +63,27 @@ void lamp_update(Entity *self)
     entity_gravity(self);
     self->roundBounds = gfc_sphere(self->position.x,self->position.y,self->position.z,12);
 
-    if(self->playerEnt->mana < self->playerEnt->manaMax && gfc_point_in_sphere(self->playerEnt->position,self->roundBounds) && SDL_GetTicks() > self->lampNextMana)
+    if(gfc_point_in_sphere(self->playerEnt->position,self->roundBounds))
     {
-        self->playerEnt->mana = self->playerEnt->mana + 1;
-        self->lampNextMana = SDL_GetTicks() + lampInterval;
+        if(!playerIn)
+        {
+            playerIn = true;
+            Mix_FadeOutMusic(1000);
+            //Mix_VolumeMusic(8);
+            Mix_FadeInChannel(6,lampCharging->sound,-1,500);
+        }
+
+        if(self->playerEnt->mana < self->playerEnt->manaMax && SDL_GetTicks() > self->lampNextMana)
+        {
+            self->playerEnt->mana = self->playerEnt->mana + 1;
+            self->lampNextMana = SDL_GetTicks() + lampInterval;
+        }
+    }
+    else if(playerIn)
+    {
+        playerIn = false;
+        Mix_FadeOutChannel(6,1000);
+        Mix_FadeInMusic(music,-1,500);
     }
 
     //self->rotation.z += 0.01;
@@ -79,4 +109,15 @@ void lamp_think(Entity *self)
     }
 }
 
+Bool lamp_give_music(Mix_Music *lampMusic)
+{
+    music = lampMusic;
+
+    if(music)
+    {
+        return true;
+    }
+
+    return false;
+}
 /*eol@eof*/
