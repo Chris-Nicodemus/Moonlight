@@ -386,7 +386,7 @@ void player_think(Entity *self)
 
         if(gfc_input_command_pressed("dash") && self->position.z == 0 && !dash && dashCooldown < SDL_GetTicks() && self->mana >= dashCost)
         {
-            gfc_sound_play(dashSound,0,0.75,2,0);
+            gfc_sound_play(dashSound,0,0.5,2,0);
             dash = true;
             self->mana = self->mana - dashCost;
             dashCooldown = SDL_GetTicks() + dashCDInterval;

@@ -6,10 +6,10 @@ void lamp_update(Entity *self);
 void lamp_think(Entity *self);
 
 uint32_t lampInterval = 100;
-uint32_t musicDownInterval = 50;
-uint32_t musicDown = 0;
+uint32_t musicInterval = 50;
+uint32_t musicChange = 0;
 
-Bool playerIn = false;
+//Bool playerIn = false;
 Sound *lampCharging;
 
 Mix_Music *music;
@@ -42,6 +42,7 @@ Entity *lamp_new(Vector3D position, Entity *player)
     ent->playerEnt = player;
     ent->lamp = true;
     ent->lampNextMana = 0;
+    ent->playerIn = false;
 
 
     //ent->bounds = gfc_box(ent->position.x-0.2,ent->position.y-0.2,ent->position.z,2,1,2);
@@ -65,12 +66,17 @@ void lamp_update(Entity *self)
 
     if(gfc_point_in_sphere(self->playerEnt->position,self->roundBounds))
     {
-        if(!playerIn)
+        if(!self->playerIn)
         {
-            playerIn = true;
-            Mix_FadeOutMusic(1000);
-            //Mix_VolumeMusic(8);
+            self->playerIn = true;
+            musicChange = SDL_GetTicks() + musicInterval;
             Mix_FadeInChannel(6,lampCharging->sound,-1,500);
+        }
+
+        if(Mix_VolumeMusic(-1) > 0 && musicChange < SDL_GetTicks())
+        {
+            musicChange = SDL_GetTicks() + musicInterval;
+            Mix_VolumeMusic(Mix_VolumeMusic(-1) - 1);
         }
 
         if(self->playerEnt->mana < self->playerEnt->manaMax && SDL_GetTicks() > self->lampNextMana)
@@ -79,14 +85,17 @@ void lamp_update(Entity *self)
             self->lampNextMana = SDL_GetTicks() + lampInterval;
         }
     }
-    else if(playerIn)
+    else if(self->playerIn)
     {
-        playerIn = false;
+        self->playerIn = false;
         Mix_FadeOutChannel(6,1000);
-        Mix_FadeInMusic(music,-1,500);
     }
 
-    //self->rotation.z += 0.01;
+    if(Mix_VolumeMusic(-1) < 32 && !self->playerIn && musicChange < SDL_GetTicks())
+    {
+        musicChange = SDL_GetTicks() + musicInterval;
+        Mix_VolumeMusic(Mix_VolumeMusic(-1) + 1);
+    }
 }
 
 void lamp_think(Entity *self)

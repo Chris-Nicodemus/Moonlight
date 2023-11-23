@@ -89,6 +89,7 @@ typedef struct Entity_S
     Vector3D    exitPosition; //where you show up when leave a vase
     Bool        vase; //proof that ent is a vase
     Bool        lamp;
+    Bool        playerIn; //proof that player is inside object (currently just for lamps)
     uint32_t    lampNextMana;
     Bool        firework;
     uint32_t    fireworkExplosion;
