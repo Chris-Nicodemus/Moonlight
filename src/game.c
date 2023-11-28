@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <SDL.h>            
 #include <SDL_mixer.h>
 
@@ -51,16 +54,106 @@ int main(int argc,char *argv[])
 
     Entity *player;
     float manaRatio = 0.0;
-    //uint32_t nextManaLoss = 0;
-
+    
+    Bool edit = false;
+    char *testString;
     for (a = 1; a < argc;a++)
     {
         if (strcmp(argv[a],"--debug") == 0)
         {
             __DEBUG = 1;
         }
+
+        if (strcmp(argv[a],"--edit") == 0)
+        {
+            slog("edit mode");
+            edit = true;
+        }
     }
     
+    if(edit)
+    {
+        FILE *custom;
+        custom = fopen("config/custom.json","w");
+
+        int type;
+        float x,y,z;
+        char *input = (char *)malloc(10);
+        Bool done = false;
+        fprintf(custom,"{\n\t\"world\":\n\t{\n\t\t");
+        fprintf(custom,"\"model\":\"models/plain.model\",\n\t\t");
+        fprintf(custom,"\"position\":[0,0,0],\n\t\t");
+        fprintf(custom,"\"scale\":[1,1,1],\n\t\t");
+        fprintf(custom,"\"rotation\":[0,0,0]\n\t},");
+        fprintf(custom,"\n\n\t\"spawns\":\n\t[\n\t\t{");
+        fprintf(custom,"\n\t\t\t\"name\":\"player\",\n\t\t\t");
+        printf("Where would you like the player to be? (All on one line with a space in between)\n");
+        scanf("%f %f %f", &x, &y, &z);
+        slog("%f",x);
+        //printf("y:");
+        //scanf("%f", &y);
+        slog("%f",y);
+        //printf("z:");
+        //scanf("%f", &z);
+        slog("%f",z);
+        fprintf(custom,"\"position\":[%f,%f,%f]\n\t\t}",x,y,z);
+
+        while(!done)
+        {
+            printf("Enter name of entity to spawn in world, or \"done\" if finished\n");
+            scanf("%s",input);
+            slog(input);
+            if(strcmp(input,"done")==0)
+            {
+                done = true;
+            }
+            else if(strcmp(input,"enemy") == 0)
+            {
+                printf("Enemy type? (1-3)\n");
+                scanf("%i", &type);
+                printf("Position? (All on one line with a space in between)\n");
+                scanf("%f %f %f", &x, &y, &z);
+                fprintf(custom,",\n\t\t{\n\t\t\t\"name\":\"enemy\",\n\t\t\t");
+                fprintf(custom,"\"type\":\"%i\",\n\t\t\t",type);
+                fprintf(custom,"\"position\":[%f,%f,%f]\n\t\t}",x,y,z);
+                
+            }
+            else if(strcmp(input,"vase") == 0)
+            {
+                printf("Position? (All on one line with a space in between)\n");
+                scanf("%f %f %f", &x, &y, &z);
+                fprintf(custom,",\n\t\t{\n\t\t\t\"name\":\"vase\",\n\t\t\t");
+                fprintf(custom,"\"position\":[%f,%f,%f],\n\t\t\t",x,y,z);
+                printf("Exit position? (All on one line with a space in between)\n");
+                scanf("%f %f %f", &x, &y, &z);
+                fprintf(custom,"\"exit\":[%f,%f,%f]\n\t\t}",x,y,z);
+            }
+            else if(strcmp(input,"firework") == 0)
+            {
+                printf("Position? (All on one line with a space in between)\n");
+                scanf("%f %f %f", &x, &y, &z);
+                fprintf(custom,",\n\t\t{\n\t\t\t\"name\":\"firework\",\n\t\t\t");
+                fprintf(custom,"\"position\":[%f,%f,%f]\n\t\t}",x,y,z);
+            }
+            else if(strcmp(input,"lamp") == 0)
+            {
+                printf("Position? (All on one line with a space in between)\n");
+                scanf("%f %f %f", &x, &y, &z);
+                fprintf(custom,",\n\t\t{\n\t\t\t\"name\":\"lamp\",\n\t\t\t");
+                fprintf(custom,"\"position\":[%f,%f,%f]\n\t\t}",x,y,z);
+            }
+            else if(strcmp(input,"companion") == 0)
+            {
+                printf("Position? (All on one line with a space in between)\n");
+                scanf("%f %f %f", &x, &y, &z);
+                fprintf(custom,",\n\t\t{\n\t\t\t\"name\":\"companion\",\n\t\t\t");
+                fprintf(custom,"\"position\":[%f,%f,%f]\n\t\t}",x,y,z);
+            }
+        }
+        fprintf(custom,"\n\t]\n}");
+        fclose(custom);
+    }
+
     init_logger("gf3d.log",0);    
     gfc_input_init("config/input.cfg");
     slog("gf3d begin");
@@ -80,42 +173,20 @@ int main(int argc,char *argv[])
     
 //     if (agu)agu->selected = 1;
     //w = world_load("config/testworld.json");
-    
-    forest = world_load("config/forest.json");
+    if(!edit)
+    {
+        forest = world_load("config/forest.json");
+    }
+    else
+    {
+        forest = world_load("config/custom.json");
+    }
     player = gfc_list_get_nth(forest->entityList,0);
     lamp_give_music(awaken);
     SDL_SetRelativeMouseMode(SDL_TRUE);
     slog_sync();
     gf3d_camera_set_scale(vector3d(1,1,1));
-    //player = player_new(vector3d(-50,0,0));
 
-    //Entity *companion = companion_new(vector3d(-40,0,10),player);
-    //player->companion = companion;
-
-    //enemy = enemy_new(vector3d(-200,-200,10),player,1);
- 
-
-    //Entity *vase = vase_new(vector3d(-10,-10,0));
-    //vase->exitPosition = vector3d(-17.2,-18.6,0);
-
-    //Entity *lamp = lamp_new(vector3d(10,10,0),player);
-    /*int i;
-    for(i = 0; i < 5; i++)
-    {
-    Entity *fireSprite = enemy_new(vector3d(30 + i,30 + i,10 + i),player,2);
-    fireSprite->tracking = true;
-    }*/
-
-    //Entity *mage = enemy_new(vector3d(1000,1000,30),player, 3);
-     /*for (a = 0; a < 100; a++)
-    {
-        particle[a].position = vector3d(gfc_crandom() * 10,gfc_crandom() * 10,gfc_crandom() * 10);
-        //particle[a].color = gfc_color(0,0,0,1);
-        particle[a].color = gfc_color(gfc_random(),gfc_random(),gfc_random(),1);
-        particle[a].size = 100 * gfc_random();
-    }*/
-
-    //Entity *firework = firework_new(vector3d(-100,-100,10));
     a = 0;
     sky = gf3d_model_load("models/sky.model");
     gfc_matrix_identity(skyMat);

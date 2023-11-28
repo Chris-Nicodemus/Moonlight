@@ -16,7 +16,7 @@ uint32_t awareInterval2 = 1000;
 uint32_t flameCDInterval = 10000;
 float flameSpawnRadius = 20;
 
-
+Sound *flameSpawnSound;
 void enemy_update(Entity *self);
 
 void enemy_think(Entity *self);
@@ -79,6 +79,11 @@ Entity *enemy_new(Vector3D pos, Entity *passedPlayer, int enemyType)
             ent->tracking = false;
             ent->speed = speed2;
             ent->spriteLife = SDL_GetTicks() + spriteLifeInterval;
+
+            if(!flameSpawnSound)
+            {
+                flameSpawnSound = gfc_sound_load("audio/zapsplat_nature_fire_flames_blow_hard_very_short_001_90299.wav",1,7);
+            }
             break;
         case 3:
             ent->think = mage_think;
@@ -255,7 +260,9 @@ void mage_think(Entity *self)
                 self->flames[i]->tracking = true;
                 self->flameNum = self->flameNum + 1;
                 self->flameCD = SDL_GetTicks() + flameCDInterval;
+                //gfc_sound_play(flameSpawnSound,0,1,i+7,0);
             }
+            gfc_sound_play(flameSpawnSound,0,1,7,0);
         }
 
         if(self->pinged && !self->aware)
