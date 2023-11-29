@@ -41,6 +41,7 @@ int main(int argc,char *argv[])
     int a;
     
     //Sprite *mouse = NULL;
+    Sprite *moon = NULL;
     int mousex,mousey;
     //Uint32 then;
     float mouseFrame = 0;
@@ -56,7 +57,10 @@ int main(int argc,char *argv[])
     float manaRatio = 0.0;
     
     Bool edit = false;
-    char *testString;
+    Bool custom = false;
+
+    Bool mainMenu = true;
+
     for (a = 1; a < argc;a++)
     {
         if (strcmp(argv[a],"--debug") == 0)
@@ -68,6 +72,13 @@ int main(int argc,char *argv[])
         {
             slog("edit mode");
             edit = true;
+            custom = true;
+        }
+
+        if (strcmp(argv[a],"--custom") == 0)
+        {
+            slog("launching pre-built custom map");
+            custom = true;
         }
     }
     
@@ -164,6 +175,7 @@ int main(int argc,char *argv[])
     slog_sync();
     
     entity_system_init(1024);
+    
     gfc_audio_init(100,32,4,10,1,0);
     Mix_Music *awaken = gfc_sound_load_music("audio/awaken-136824.wav");
     Mix_PlayMusic(awaken, -1);
@@ -173,7 +185,7 @@ int main(int argc,char *argv[])
     
 //     if (agu)agu->selected = 1;
     //w = world_load("config/testworld.json");
-    if(!edit)
+    if(!custom)
     {
         forest = world_load("config/forest.json");
     }
@@ -194,6 +206,8 @@ int main(int argc,char *argv[])
     
     // main game loop
     slog("gf3d main loop begin");
+
+    char text[10];
     while(!done)
     {
         gfc_input_update();
@@ -202,7 +216,8 @@ int main(int argc,char *argv[])
         
         mouseFrame += 0.01;
         if (mouseFrame >= 16)mouseFrame = 0;
-        //world_run_updates(w);
+        if(!mainMenu)
+        {
         world_run_updates(forest);
         entity_think_all();
         entity_update_all();
@@ -232,16 +247,29 @@ int main(int argc,char *argv[])
                 manaRatio = (float)(player->mana)/(float)(player->manaMax)*100;
                 //slog("mana ratio: %f",manaRatio);
                 gf2d_draw_rect_filled(gfc_rect(10,650,500,32),gfc_color8(25,25,25,255));
-                gf2d_draw_rect_filled(gfc_rect(10,650,(int)(manaRatio)*5,32),gfc_color8(0,245,255,170));
-                char text[10];
+                gf2d_draw_rect_filled(gfc_rect(10,650,(int)(manaRatio)*5,32),gfc_color8(0,245,255,170));    
                 sprintf(text,"Mana: %i",player->mana);
                 gf2d_font_draw_line_tag(text,FT_H1,gfc_color(1,1,1,1),vector2d(15,650));
-                /*if(player->mana > 0 && SDL_GetTicks() > nextManaLoss)
-                {
-                    player->mana = player->mana - 5;
-                    nextManaLoss = SDL_GetTicks() + 1000;
-                }*/
-                //gf2d_sprite_draw(mouse,vector2d(mousex,mousey),vector2d(2,2),vector3d(8,8,0),gfc_color(0.3,.9,1,0.9),(Uint32)mouseFrame);
+        }
+        else
+        {
+            gf3d_camera_update_view();
+            gf3d_camera_get_view_mat4(gf3d_vgraphics_get_view_matrix());
+
+            gf3d_vgraphics_render_start();
+            //2534 1690
+            moon = gf2d_sprite_load("images/ismael-gil-forest-night.jpg",0,0,1);
+            gf2d_sprite_draw(moon,vector2d(0,0),vector2d(0.7,0.7),vector3d(0,0,0),gfc_color(1,1,1,1),1);
+
+            gf2d_draw_rect_filled(gfc_rect(10 ,10,1000,32),gfc_color8(128,128,128,255));
+            gf2d_font_draw_line_tag("Press space to begin",FT_H1,gfc_color(1,1,1,1), vector2d(10,10));
+            
+            
+            if(gfc_input_command_pressed("jump"))
+            {
+                mainMenu = false;
+            }
+        }
         gf3d_vgraphics_render_end();
 
         if (gfc_input_command_down("exit"))done = 1; // exit condition

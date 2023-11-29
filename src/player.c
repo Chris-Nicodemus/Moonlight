@@ -87,6 +87,7 @@ Entity *player_new(Vector3D position)
        if(walkSound)
        {
            gfc_sound_play(walkSound,-1,0,0,0);
+           Mix_Volume(0,0);
            //slog("playing");
        }
     }
