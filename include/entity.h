@@ -213,4 +213,6 @@ void entity_stars(Entity* self, float radius, uint32_t stunDuration);
  * @param radius range in question
 */
 void entity_shatter(Entity *self, float radius);
+
+void entity_free_all();
 #endif

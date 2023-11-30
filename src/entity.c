@@ -432,4 +432,12 @@ void entity_shatter(Entity *self, float radius)
         entity_free(toKill[i]);
     }
 }
+
+void entity_free_all()
+{
+    while(entity_manager.entity_count > 0)
+    {
+        entity_free(&entity_manager.entity_list[0]);
+    }
+}
 /*eol@eof*/

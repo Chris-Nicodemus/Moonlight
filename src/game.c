@@ -60,6 +60,11 @@ int main(int argc,char *argv[])
     Bool custom = false;
 
     Bool mainMenu = true;
+    Color spaceColor = gfc_color8(255,255,255,255);
+
+    uint32_t spaceTextTime = 0;
+    uint32_t spaceTextInterval = 50;
+    Bool spaceTextUp = false;
 
     for (a = 1; a < argc;a++)
     {
@@ -240,7 +245,7 @@ int main(int argc,char *argv[])
             }
             //2D draws
                 gf2d_draw_rect_filled(gfc_rect(10 ,10,1000,32),gfc_color8(128,128,128,255));
-                gf2d_font_draw_line_tag("Press q to exit",FT_H1,gfc_color(1,1,1,1), vector2d(10,10));
+                gf2d_font_draw_line_tag("Press q to exit",FT_H1,gfc_color(1,1,1,1), vector2d(10,10),0);
                 //gf2d_draw_bezier_curve(Vector2D(0,0), Vector2D(1,1), Vector2D(2,0), Color(0,243,255,1));
                 gf2d_draw_rect(gfc_rect(10 ,10,1000,32),gfc_color8(255,255,255,255));
                 gf2d_draw_rect_filled(gfc_rect(10,650,(int)(manaRatio)*5,32),gfc_color8(0,245,255,170));
@@ -249,7 +254,7 @@ int main(int argc,char *argv[])
                 gf2d_draw_rect_filled(gfc_rect(10,650,500,32),gfc_color8(25,25,25,255));
                 gf2d_draw_rect_filled(gfc_rect(10,650,(int)(manaRatio)*5,32),gfc_color8(0,245,255,170));    
                 sprintf(text,"Mana: %i",player->mana);
-                gf2d_font_draw_line_tag(text,FT_H1,gfc_color(1,1,1,1),vector2d(15,650));
+                gf2d_font_draw_line_tag(text,FT_H1,gfc_color(1,1,1,1),vector2d(15,650), 0);
         }
         else
         {
@@ -261,9 +266,37 @@ int main(int argc,char *argv[])
             moon = gf2d_sprite_load("images/ismael-gil-forest-night.jpg",0,0,1);
             gf2d_sprite_draw(moon,vector2d(0,0),vector2d(0.7,0.7),vector3d(0,0,0),gfc_color(1,1,1,1),1);
 
-            gf2d_draw_rect_filled(gfc_rect(10 ,10,1000,32),gfc_color8(128,128,128,255));
-            gf2d_font_draw_line_tag("Press space to begin",FT_H1,gfc_color(1,1,1,1), vector2d(10,10));
+            //gf2d_draw_rect_filled(gfc_rect(10 ,10,1000,32),gfc_color8(128,128,128,255));
+            gf2d_font_draw_line_tag("Moonlight",FT_H2,gfc_color(1,1,1,1), vector2d(480,80), 4);
+            gf2d_font_draw_line_tag("Press space to begin",FT_H2,spaceColor, vector2d(420,580),3);
             
+            if(SDL_GetTicks() > spaceTextTime)
+            {
+                spaceTextTime = SDL_GetTicks() + spaceTextInterval;
+                //slog("triggering");
+                if(!spaceTextUp && spaceColor.a - 5 <= 5)
+                {
+                    //spaceColor.a = spaceColor.a + 1;
+                    spaceTextUp = true;
+                    //slog("switch up");
+                }
+                else if(spaceTextUp && spaceColor.a + 5 >= 250)
+                {
+                    //spaceColor.a = spaceColor.a - 1;
+                    spaceTextUp = false;
+                    //slog("switch down");
+                }
+
+                if(spaceTextUp)
+                {
+                    spaceColor.a = spaceColor.a + 5;
+                }
+                else
+                {
+                    spaceColor.a = spaceColor.a - 5;
+                }
+                //slog("%f",spaceColor.a);
+            }
             
             if(gfc_input_command_pressed("jump"))
             {
@@ -276,6 +309,7 @@ int main(int argc,char *argv[])
     }    
     
     //world_delete(w);
+    //entity_free_all();
     world_delete(forest);
     vkDeviceWaitIdle(gf3d_vgraphics_get_default_logical_device());    
     //cleanup
