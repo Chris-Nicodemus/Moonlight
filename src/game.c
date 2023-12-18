@@ -31,6 +31,7 @@
 #include "vase.h"
 #include "lamp.h"
 #include "firework.h"
+#include "villager.h"
 
 
 extern int __DEBUG;
@@ -213,6 +214,11 @@ int main(int argc,char *argv[])
     slog("gf3d main loop begin");
 
     char text[10];
+
+    Entity *villager = villager_new(vector3d(100,150,0));
+    extern char* dialogText;
+    extern Bool dialog;
+
     while(!done)
     {
         gfc_input_update();
@@ -243,6 +249,12 @@ int main(int argc,char *argv[])
                     gf3d_particle_draw(&stars[a]);
                 }
             }
+
+            if(dialog)
+            {
+                gf2d_draw_rect_filled(gfc_rect(350 ,650,1500,32),gfc_color8(128,128,128,255));
+                gf2d_font_draw_line_tag(dialogText,FT_H1,gfc_color(1,1,1,1), vector2d(350,650),0);
+            }
             //2D draws
                 gf2d_draw_rect_filled(gfc_rect(10 ,10,1000,32),gfc_color8(128,128,128,255));
                 gf2d_font_draw_line_tag("Press q to exit",FT_H1,gfc_color(1,1,1,1), vector2d(10,10),0);
@@ -255,6 +267,7 @@ int main(int argc,char *argv[])
                 gf2d_draw_rect_filled(gfc_rect(10,650,(int)(manaRatio)*5,32),gfc_color8(0,245,255,170));    
                 sprintf(text,"Mana: %i",player->mana);
                 gf2d_font_draw_line_tag(text,FT_H1,gfc_color(1,1,1,1),vector2d(15,650), 0);
+            
         }
         else
         {

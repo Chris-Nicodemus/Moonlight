@@ -70,6 +70,10 @@ Sound *starSound;
 Sound *jump;
 Sound *glass;
 
+//Dialog Tree
+Bool dialog = false;
+char *dialogText = "";
+Bool hasKey = false;
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
@@ -153,6 +157,8 @@ Entity *player_new(Vector3D position)
         stars[i].color = gfc_color(gfc_random(),gfc_random(),gfc_random(),0);
         stars[i].size = gfc_random() * 30;
     }
+
+
     return ent;
 }
 
@@ -228,6 +234,7 @@ void player_think(Entity *self)
     mouse.x = mx;
     mouse.y = my;
     w = vector2d_from_angle(self->rotation.z);
+
     if(!self->slowed)
     {
         forward.x = w.x * self->speed;
@@ -324,7 +331,8 @@ void player_think(Entity *self)
 
     if(!self->hiding && !self->stunned)
     {
-        
+        if(!dialog)
+        {
         if (keys[SDL_SCANCODE_W])
         {   
             if(testPostion(self,forward))
@@ -357,6 +365,7 @@ void player_think(Entity *self)
                 walking = true;
             }
         }
+        }
 
         if(!walking)
         {
@@ -367,6 +376,8 @@ void player_think(Entity *self)
             Mix_Volume(0,128);
         }
 
+        if(!dialog)
+        {
         if(gfc_input_command_pressed("jump") && self->mana >= jumpCost && self->position.z == 0)
         {
             //slog("position: x:%f y:%f z:%f",self->position.x,self->position.y,self->position.z);
@@ -471,7 +482,7 @@ void player_think(Entity *self)
             }
         }
     }
-
+    }
     if(gfc_input_command_pressed("use"))
     {
         if(self->hiding && item)
@@ -484,6 +495,10 @@ void player_think(Entity *self)
                 self->companion->hidden = 0;
             }
             item = NULL;
+        }
+        else if (dialog)
+        {
+            dialog = false;
         }
         else
         {
@@ -506,10 +521,14 @@ void player_think(Entity *self)
                     item->fireworkExplosion = SDL_GetTicks() + fireworkFuse;
                     item->used = true;
                 }
+                if(item->npc)
+                {
+                    dialog = !dialog;
+                }
             }
         }
+    
     }
-
     entity_gravity(self);
 }
 
@@ -670,5 +689,23 @@ Bool player_touch(Entity *player, Entity *inflictor, int type)
     }
     
     return false;
+}
+
+Vector3D player_getRight(Entity *player)
+{
+    Vector3D right = {0};
+    Vector2D w,mouse;
+    int mx,my;
+    SDL_GetRelativeMouseState(&mx,&my);
+    const Uint8 * keys;
+    keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
+
+    mouse.x = mx;
+    mouse.y = my;
+    w = vector2d_from_angle(player->rotation.z - GFC_HALF_PI);
+
+    right.x = w.x;
+    right.y = w.y;
+    return right;
 }
 /*eol@eof*/

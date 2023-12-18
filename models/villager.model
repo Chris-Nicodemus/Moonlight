@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/villager/villager.obj",
+        "texture":"models/villager/Mysterious_Low_Substance_Body_BaseColor.png"
+    }
+}

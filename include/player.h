@@ -26,4 +26,11 @@ Bool player_getCompanion(Entity *player, Entity *passedCompanion);
  * @return true if the player will die as a result of the touch
 */
 Bool player_touch(Entity *player, Entity *inflictor, int type);
+
+/**
+ * @brief pass the player's right vector to the companion
+ * @param player is the player that the companion is following
+ * @return right vector to modify companion's rotation by 
+*/
+Vector3D player_getRight(Entity *player);
 #endif

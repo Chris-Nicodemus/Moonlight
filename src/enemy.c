@@ -147,7 +147,7 @@ void enemy_think(Entity *self)
             vector3d_normalize(&dir);
             self->velocity.x = dir.x * self->speed;
             self->velocity.y = dir.y * self->speed;
-
+            self->rotation.z = player->rotation.z;
             if(gfc_box_overlap(self->bounds,player->bounds))
             {
                 player_touch(player,self,self->type);

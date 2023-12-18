@@ -1,6 +1,9 @@
 
 #include "simple_logger.h"
 #include "companion.h"
+#include "player.h"
+
+Vector3D posDirection;
 
 Entity *companionPlayer = NULL;
 
@@ -41,12 +44,14 @@ void companion_update(Entity *self)
     }
     vector3d_add(self->position,self->position,self->velocity);
     //entity_gravity(self);
-    self->position.x = companionPlayer->position.x -5;
-    self->position.y = companionPlayer->position.y -5;
+    posDirection = player_getRight(companionPlayer);
+    self->position.x = companionPlayer->position.x + posDirection.x * 5;
+    self->position.y = companionPlayer->position.y + posDirection.y * 5;
     self->position.z = companionPlayer->position.z + 10;
 
     self->rotation.x = companionPlayer->rotation.x * -1;
     self->rotation.y = companionPlayer->rotation.y * -1;
+    self->rotation.z = companionPlayer->rotation.z;
     //self->rotation.z += 0.01;
 }
 

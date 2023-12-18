@@ -309,7 +309,7 @@ Entity *entity_find_item(Entity* self, float radius)
         }
 
         //skip if not ent type we lookin for
-        if(!entity_manager.entity_list[i].vase && !entity_manager.entity_list[i].firework)
+        if(!entity_manager.entity_list[i].vase && !entity_manager.entity_list[i].firework && !entity_manager.entity_list[i].npc)
         {
             continue;
         }

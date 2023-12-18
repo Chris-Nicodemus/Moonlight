@@ -94,6 +94,7 @@ typedef struct Entity_S
     Bool        firework;
     uint32_t    fireworkExplosion;
     Bool        used;
+    Bool        npc;
 
     //player specific
     int manaMax;
