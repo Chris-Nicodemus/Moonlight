@@ -74,6 +74,8 @@ Sound *glass;
 Bool dialog = false;
 char *dialogText = "";
 Bool hasKey = false;
+char *options[2];
+Bool newDialog = true;
 Entity *player_new(Vector3D position)
 {
     Entity *ent = NULL;
@@ -499,6 +501,7 @@ void player_think(Entity *self)
         else if (dialog)
         {
             dialog = false;
+            newDialog = true;
         }
         else
         {

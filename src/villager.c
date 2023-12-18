@@ -1,10 +1,21 @@
 #include "simple_logger.h"
+#include "gfc_input.h"
 #include "villager.h"
+
+float safeDistance = 1000;
 
 extern Bool dialog;
 extern char* dialogText;
 extern Bool hasKey;
-char *firstStep = "Psst! Hey! If you\'re looking for the key, I saw the Mother hide it UNDER THE LAMP using magic!";
+extern char* options[];
+extern Bool newDialog;
+char *hello = "Hey Kid! I\'m hurt! Can you lure those soldiers away from me? I\'ll help you if you do!";
+char *accept = "Thanks! Come back to me when they\'re gone!";
+char *deny = "But... Please!";
+char *reconsider = "Did you reconsider? Will you help me? Please?";
+char *distractReminder = "I won\'t tell you where the key is until those soldiers are gone!";
+char *thanks = "You got rid of them! Thanks! The key is hidden UNDER THE LAMP, but you need magic to see it!";
+char *keyReminder = "Psst! Hey! If you\'re looking for the key, I saw the Mother hide it UNDER THE LAMP using magic!";
 char *secondStep = "Second step not implemented";
 void villager_update(Entity *self);
 
@@ -53,10 +64,76 @@ void villager_update(Entity *self)
     {
         if(strcmp(dialogText,"") == 0)
         {
-            dialogText = firstStep;
+            dialogText = hello;
+            options[0] = "1. I\'ll help you!";
+            options[1] = "2. Sorry, it\'s too dangerous!";
         }
 
-        if(hasKey && strcmp(dialogText,firstStep) == 0)
+        if(strcmp(dialogText, hello) == 0)
+        {
+            if(gfc_input_command_pressed("shadow"))
+            {
+                dialogText = accept;
+                options[0] = "";
+                options[1] = "";
+                newDialog = false;
+            }
+
+            if(gfc_input_command_pressed("star"))
+            {
+                dialogText = deny;
+                options[0] = "";
+                options[1] = "";
+                newDialog = false;
+            }
+        }
+
+        if(newDialog && strcmp(dialogText,deny) == 0)
+        {
+            dialogText = reconsider;
+            options[0] = "1. Fine... I\'ll help.";
+            options[1] = "2. Sorry, I can\'t.";
+        }
+
+        if(strcmp(dialogText, reconsider) == 0)
+        {
+            if(gfc_input_command_pressed("shadow"))
+            {
+                dialogText = accept;
+                options[0] = "";
+                options[1] = "";
+                newDialog = false;
+            }
+
+            if(gfc_input_command_pressed("star"))
+            {
+                dialogText = deny;
+                options[0] = "";
+                options[1] = "";
+                newDialog = false;
+            }
+        }
+
+        if(newDialog && (strcmp(dialogText,accept) == 0 || strcmp(dialogText,distractReminder) == 0))
+        {
+            if(entity_enemies_in_radius(self, safeDistance))
+            {
+                dialogText = distractReminder;
+                newDialog = false;
+            }
+            else
+            {
+                dialogText = thanks;
+                newDialog = false;
+            }
+        }
+
+        if(newDialog && strcmp(dialogText,thanks) == 0)
+        {
+            dialogText = keyReminder;
+        }
+        
+        if(hasKey)
         {
             dialogText = secondStep;
         }

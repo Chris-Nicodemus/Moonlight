@@ -433,6 +433,37 @@ void entity_shatter(Entity *self, float radius)
     }
 }
 
+Bool entity_enemies_in_radius(Entity *self, float radius)
+{
+    if(!self)
+    {
+        slog("entity stars failed cuz no self");
+    }
+
+    int i;
+    for(i = 0; i < entity_manager.entity_count; i++)
+    {
+        if(!entity_manager.entity_list[i]._inuse)
+        {
+            continue;
+        }
+
+        //skip if too far
+        if(vector3d_magnitude_between(self->position,entity_manager.entity_list[i].position) > radius)
+        {
+            continue;
+        }
+
+        if(entity_manager.entity_list[i].type > 0)
+        {
+            //enemies in radius
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void entity_free_all()
 {
     while(entity_manager.entity_count > 0)

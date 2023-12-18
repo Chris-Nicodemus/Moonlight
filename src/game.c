@@ -218,6 +218,7 @@ int main(int argc,char *argv[])
     Entity *villager = villager_new(vector3d(100,150,0));
     extern char* dialogText;
     extern Bool dialog;
+    extern char* options[];
 
     while(!done)
     {
@@ -252,8 +253,13 @@ int main(int argc,char *argv[])
 
             if(dialog)
             {
-                gf2d_draw_rect_filled(gfc_rect(350 ,650,1500,32),gfc_color8(128,128,128,255));
-                gf2d_font_draw_line_tag(dialogText,FT_H1,gfc_color(1,1,1,1), vector2d(350,650),0);
+                //gf2d_draw_rect_filled(gfc_rect(350 ,650,1300,64),gfc_color8(128,128,128,255));
+                gf2d_font_draw_line_tag(dialogText,FT_H1,gfc_color8(105,25,139,255), vector2d(175,600),1.5);
+                if(strcmp(options[0],"") != 0)
+                {
+                    gf2d_font_draw_line_tag(options[0],FT_H1,gfc_color8(105,25,139,255), vector2d(175,550),1.5);
+                    gf2d_font_draw_line_tag(options[1],FT_H1,gfc_color8(105,25,139,255), vector2d(775,550),1.5);
+                }
             }
             //2D draws
                 gf2d_draw_rect_filled(gfc_rect(10 ,10,1000,32),gfc_color8(128,128,128,255));

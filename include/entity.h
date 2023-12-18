@@ -215,5 +215,13 @@ void entity_stars(Entity* self, float radius, uint32_t stunDuration);
 */
 void entity_shatter(Entity *self, float radius);
 
+/**
+ * @brief iterate through all enemies and check distance from passed entity
+ * @param self entity in question
+ * @param radius checks if any enemies are within this radius
+ * @return true if at least one enemy in radius, and false if there are none
+*/
+Bool entity_enemies_in_radius(Entity *self, float radius);
+
 void entity_free_all();
 #endif
