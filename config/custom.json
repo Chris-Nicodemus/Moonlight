@@ -1,0 +1,29 @@
+{
+	"world":
+	{
+		"model":"models/plain.model",
+		"position":[0,0,0],
+		"scale":[1,1,1],
+		"rotation":[0,0,0]
+	},
+
+	"spawns":
+	[
+		{
+			"name":"player",
+			"position":[-50.000000,0.000000,0.000000]
+		},
+		{
+			"name":"villager",
+			"position":[100.000000,150.000000,0.000000]
+		},
+		{
+			"name":"key",
+			"position":[10.000000,10.000000,10.000000]
+		},
+		{
+			"name":"door",
+			"position":[550.000000,50.000000,0.000000]
+		}
+	]
+}

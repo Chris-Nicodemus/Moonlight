@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/key/key.obj",
+        "texture":"models/key/Key_albedo.jpg"
+    }
+}

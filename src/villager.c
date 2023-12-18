@@ -16,7 +16,7 @@ char *reconsider = "Did you reconsider? Will you help me? Please?";
 char *distractReminder = "I won\'t tell you where the key is until those soldiers are gone!";
 char *thanks = "You got rid of them! Thanks! The key is hidden UNDER THE LAMP, but you need magic to see it!";
 char *keyReminder = "Psst! Hey! If you\'re looking for the key, I saw the Mother hide it UNDER THE LAMP using magic!";
-char *secondStep = "Second step not implemented";
+char *secondStep = "Great! Now that you have the key you can open the door to get out of here!";
 void villager_update(Entity *self);
 
 void villager_think(Entity *self);
@@ -42,8 +42,8 @@ Entity *villager_new(Vector3D position)
     ent->npc = true;
 
     //ent->bounds = gfc_box(ent->position.x-0.2,ent->position.y-0.2,ent->position.z,2,1,2);
-    ent->roundBounds = gfc_sphere(ent->position.x,ent->position.y,ent->position.z, 4);
-    ent->bounds = gfc_box(0,0,0,0,0,0);
+    ent->roundBounds = gfc_sphere(ent->position.x,ent->position.y,ent->position.z, 0);
+    ent->bounds = gfc_box(ent->position.x,ent->position.y,ent->position.z,7,7,7);
     ent->scale = vector3d(12,12,12);
 
     return ent;
@@ -58,16 +58,20 @@ void villager_update(Entity *self)
     }
     vector3d_add(self->position,self->position,self->velocity);
     entity_gravity(self);
-    self->roundBounds = gfc_sphere(self->position.x,self->position.y,self->position.z,4);
+    self->bounds = gfc_box(self->position.x,self->position.y,self->position.z,7,7,7);
 
     if(dialog)
     {
-        if(strcmp(dialogText,"") == 0)
+        if(strcmp(dialogText,"") == 0 && !hasKey)
         {
             dialogText = hello;
             options[0] = "1. I\'ll help you!";
             options[1] = "2. Sorry, it\'s too dangerous!";
         }
+        /*else if(strcmp(dialogText,"") == 0 && !hasKey)
+        {
+            dialogText = "You found the secret key! You can use it to open the door and get out of here!";
+        }*/
 
         if(strcmp(dialogText, hello) == 0)
         {
@@ -132,8 +136,8 @@ void villager_update(Entity *self)
         {
             dialogText = keyReminder;
         }
-        
-        if(hasKey)
+
+        if(hasKey && strcmp(dialogText, "") != 0)
         {
             dialogText = secondStep;
         }

@@ -1,0 +1,7 @@
+{
+    "model":
+    {
+        "model":"models/door/doorOpen.obj",
+        "texture":"models/door/wood.jpeg"
+    }
+}

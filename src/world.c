@@ -12,6 +12,9 @@
 #include "vase.h"
 #include "lamp.h"
 #include "firework.h"
+#include "villager.h"
+#include "key.h"
+#include "door.h"
 
 /*
 typedef struct
@@ -76,6 +79,27 @@ Entity *makeEnt(World *self, SJson *spawn)
     {
         sj_value_as_vector3d(sj_object_get_value(spawn,"position"),&pos);
         ent = firework_new(pos);
+        gfc_list_append(self->entityList,ent);
+        return ent;
+    }
+    else if(strcmp(name,"villager") == 0)
+    {
+        sj_value_as_vector3d(sj_object_get_value(spawn,"position"),&pos);
+        ent = villager_new(pos);
+        gfc_list_append(self->entityList,ent);
+        return ent;
+    }
+    else if(strcmp(name, "key") == 0)
+    {
+        sj_value_as_vector3d(sj_object_get_value(spawn,"position"),&pos);
+        ent = key_new(pos,gfc_list_get_nth(self->entityList,0));
+        gfc_list_append(self->entityList,ent);
+        return ent;
+    }
+    else if (strcmp(name, "door") == 0)
+    {
+        sj_value_as_vector3d(sj_object_get_value(spawn,"position"),&pos);
+        ent = door_new(pos);
         gfc_list_append(self->entityList,ent);
         return ent;
     }

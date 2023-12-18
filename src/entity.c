@@ -202,7 +202,8 @@ Bool entity_checkBox(Entity *self, Box bounds)
 
         if(gfc_box_overlap(bounds, entity_manager.entity_list[i].bounds))
         {
-        //    slog("returning true");
+            if(entity_manager.entity_list[i].open) return false;
+            
             return true;
         }
     }
@@ -239,6 +240,25 @@ Bool entity_checkSphere(Entity *self, Vector3D point)
         {
             if(self->player && entity_manager.entity_list[i].lamp)
             {
+                continue;
+            }
+            if(self->player && entity_manager.entity_list[i].key)
+            {
+                if(self->invisible)
+                {
+                extern Bool hasKey;
+                hasKey = true;
+                if(hasKey)
+                {
+                    slog("We has key");
+                }
+                else
+                {
+                    slog("We no has key and we messed up");
+                }
+                entity_free(&entity_manager.entity_list[i]);
+                i--;
+                }
                 continue;
             }
             return true;
@@ -309,7 +329,7 @@ Entity *entity_find_item(Entity* self, float radius)
         }
 
         //skip if not ent type we lookin for
-        if(!entity_manager.entity_list[i].vase && !entity_manager.entity_list[i].firework && !entity_manager.entity_list[i].npc)
+        if(!entity_manager.entity_list[i].vase && !entity_manager.entity_list[i].firework && !entity_manager.entity_list[i].npc && !entity_manager.entity_list[i].door)
         {
             continue;
         }

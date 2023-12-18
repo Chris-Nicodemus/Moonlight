@@ -32,7 +32,8 @@
 #include "lamp.h"
 #include "firework.h"
 #include "villager.h"
-
+#include "key.h"
+#include "door.h"
 
 extern int __DEBUG;
 
@@ -166,6 +167,27 @@ int main(int argc,char *argv[])
                 fprintf(custom,",\n\t\t{\n\t\t\t\"name\":\"companion\",\n\t\t\t");
                 fprintf(custom,"\"position\":[%f,%f,%f]\n\t\t}",x,y,z);
             }
+            else if(strcmp(input,"villager") == 0)
+            {
+                printf("Position? (All on one line with a space in between)\n");
+                scanf("%f %f %f", &x, &y, &z);
+                fprintf(custom,",\n\t\t{\n\t\t\t\"name\":\"villager\",\n\t\t\t");
+                fprintf(custom,"\"position\":[%f,%f,%f]\n\t\t}",x,y,z);
+            }
+            else if(strcmp(input,"key") == 0)
+            {
+                printf("Position? (All on one line with a space in between)\n");
+                scanf("%f %f %f", &x, &y, &z);
+                fprintf(custom,",\n\t\t{\n\t\t\t\"name\":\"key\",\n\t\t\t");
+                fprintf(custom,"\"position\":[%f,%f,%f]\n\t\t}",x,y,z);
+            }
+            else if(strcmp(input,"door") == 0)
+            {
+                printf("Position? (All on one line with a space in between)\n");
+                scanf("%f %f %f", &x, &y, &z);
+                fprintf(custom,",\n\t\t{\n\t\t\t\"name\":\"door\",\n\t\t\t");
+                fprintf(custom,"\"position\":[%f,%f,%f]\n\t\t}",x,y,z);
+            }
         }
         fprintf(custom,"\n\t]\n}");
         fclose(custom);
@@ -215,7 +237,9 @@ int main(int argc,char *argv[])
 
     char text[10];
 
-    Entity *villager = villager_new(vector3d(100,150,0));
+    //Entity *villager = villager_new(vector3d(100,150,0));
+    //Entity *key = key_new(vector3d(10,10,10), player);
+    //Entity *door = door_new(vector3d(550,50,0));
     extern char* dialogText;
     extern Bool dialog;
     extern char* options[];
@@ -254,7 +278,10 @@ int main(int argc,char *argv[])
             if(dialog)
             {
                 //gf2d_draw_rect_filled(gfc_rect(350 ,650,1300,64),gfc_color8(128,128,128,255));
+                if(strcmp(dialogText,"") != 0)
+                {
                 gf2d_font_draw_line_tag(dialogText,FT_H1,gfc_color8(105,25,139,255), vector2d(175,600),1.5);
+                }
                 if(strcmp(options[0],"") != 0)
                 {
                     gf2d_font_draw_line_tag(options[0],FT_H1,gfc_color8(105,25,139,255), vector2d(175,550),1.5);

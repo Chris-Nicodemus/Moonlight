@@ -498,7 +498,7 @@ void player_think(Entity *self)
             }
             item = NULL;
         }
-        else if (dialog)
+        else if (dialog && strcmp(options[0],"") == 0)
         {
             dialog = false;
             newDialog = true;
@@ -519,14 +519,26 @@ void player_think(Entity *self)
                     }
                     self->position = item->position;
                 }
-                if(item->firework && !item->used)
+                else if(item->firework && !item->used)
                 {
                     item->fireworkExplosion = SDL_GetTicks() + fireworkFuse;
                     item->used = true;
                 }
-                if(item->npc)
+                else if(item->npc)
                 {
-                    dialog = !dialog;
+                    dialog = true;
+                }
+                else if(item->door)
+                {
+                    if(!item->unlocked && hasKey)
+                    {
+                        item->unlocked = true;
+                    }
+
+                    if(item->unlocked)
+                    {
+                        item->open = !item->open;
+                    }
                 }
             }
         }
